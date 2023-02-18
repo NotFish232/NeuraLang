@@ -19,5 +19,4 @@ int main(int argc, char **argv){
     Lexer lexer("examples/hello_world.nl");
 
     Token token;
-    while ()
 }

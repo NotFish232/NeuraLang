@@ -6,6 +6,8 @@
 #define BINARYEXPRAST_HPP
 
 #include "ExprAST.hpp"
+#include "../Logger.hpp"
+#include <llvm/IR/IRBuilder.h>
 
 //syntax tree for binary
 class BinaryExprAST: public ExprAST {
