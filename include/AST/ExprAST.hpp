@@ -5,7 +5,7 @@
 #ifndef EXPRAST_HPP
 #define EXPRAST_HPP
 
-#include "llvm/IR/BasicBlock.hpp"
+#include <llvm/IR/BasicBlock.h>
 
 // base class for all
 class ExprAST {
