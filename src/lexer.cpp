@@ -1,66 +1,60 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include "../include/lexer.hpp"
 
 using namespace std;
+using namespace nl;
 
+const string Lexer::functionDefinition = "def";
+const string Lexer::externDefinition = "extern";
 
-const string functionDefinition = "def";
-const string externDefinition = "extern";
+Lexer::Lexer(const string &filename) {
+    m_inputStream = new ifstream(filename, ios::in);
+}
 
+Lexer::Lexer(istream &inputStream) {
+    m_inputStream = &inputStream;
+}
 
-enum class Token {
-    _eof,
-
-    // commands
-    _def,
-    _extern,
-
-    // primary
-    _identifier,
-    _number
-};
-
-static string identifierStr;
-static double numVal;
-
-// gets one token from stream, mutates stream
-static Token getToken(istream &stream) {
+Token Lexer::getToken() {
     char lastChar = ' ';
 
     while (isspace(lastChar)) {
-        stream.get(lastChar);
+        m_inputStream->get(lastChar);
     }
 
     if (isalpha(lastChar)) {
         string identifier = "";
+
         do {
             identifier += lastChar;
-        } while (stream.get(lastChar) && isalnum(lastChar));
+            m_inputStream->get(lastChar);
+        } while (isalpha(lastChar));
 
-        if (identifier == functionDefinition) {
-            return Token::_def;
+        if (identifier == "def") {
+            return Token{TokenType::_def};
         }
-        if (identifier == externDefinition) {
-            return Token::_extern;
+
+        if (identifier == "extern") {
+            return Token{TokenType::_extern};
         }
+
+        return Token{TokenType::_unknownIdentifier, identifier};
     }
 
-    if (isdigit(lastChar)) {
-        string num = "";
+    // Stacking together only numeric values
+    if (isdigit(lastChar) || lastChar == '.') {
+        std::string numStr;
 
         do {
-            num += lastChar;
-        } while (stream.get(lastChar) && isalnum(lastChar));
+            numStr += lastChar;
+            m_inputStream->get(lastChar);
+        } while (isdigit(lastChar) || lastChar == '.');
 
-        numVal = stoi(num);
-
-        return Token::_number;
+        return {TokenType::_number, "", strtod(numStr.c_str(), 0)};
     }
 
     if (lastChar == '#') {
         do {
-            stream.get(lastChar);
+            m_inputStream->get(lastChar);
         } while (lastChar != EOF && lastChar != '\n' && lastChar != '\r');
 
         if (!lastChar != EOF) return getToken(stream);
@@ -71,11 +65,9 @@ static Token getToken(istream &stream) {
     return lastChar;
 }
 
-int main(int argc, char **argv) {
-    if (argc == 1) {
-        return EXIT_FAILURE;
+    if (lastChar == EOF) {
+        return Token{TokenType::_eof};
     }
-    string filename = argv[1];
 
-    string code;
+    return Token{TokenType::_unknownToken, "" + lastChar};
 }
