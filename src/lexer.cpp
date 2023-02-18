@@ -69,6 +69,8 @@ static Token getToken(istream &stream) {
     if (lastChar == EOF) return Token::_eof;
 
 
+    return lastChar;
+
 }
 
 int main(int argc, char **argv) {
