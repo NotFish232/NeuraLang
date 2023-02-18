@@ -2,10 +2,10 @@
 // Created by piuslee on 2/18/23.
 //
 
-#ifndef CALLEXPRAST_H
-#define CALLEXPRAST_H
+#ifndef CALLEXPRAST_HPP
+#define CALLEXPRAST_HPP
 
-#include "ExprAST.h"
+#include "ExprAST.hpp"
 
 //function calls syntax tree
 class CallExprAST: public ExprAST {

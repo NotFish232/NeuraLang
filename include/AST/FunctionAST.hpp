@@ -2,11 +2,11 @@
 // Created by piuslee on 2/18/23.
 //
 
-#ifndef FUNCTIONAST_H
-#define FUNCTIONAST_H
+#ifndef FUNCTIONAST_HPP
+#define FUNCTIONAST_HPP
 
-#include "ExprAST.h"
-#include "PrototypeAST.h"
+#include "ExprAST.hpp"
+#include "PrototypeAST.hpp"
 
 //function syntax tree
 //this represents the function itself.

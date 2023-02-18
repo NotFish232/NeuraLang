@@ -2,10 +2,10 @@
 // Created by piuslee on 2/18/23.
 //
 
-#ifndef PROTOTYPEAST_H
-#define PROTOTYPEAST_H
+#ifndef PROTOTYPEAST_HPP
+#define PROTOTYPEAST_HPP
 
-#include "ExprAST.h"
+#include "ExprAST.hpp"
 
 //prototype function syntax tree, captures the name and the arguments
 //basically represents the function, as a prototype.

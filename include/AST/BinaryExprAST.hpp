@@ -2,10 +2,10 @@
 // Created by piuslee on 2/18/23.
 //
 
-#ifndef BINARYEXPRAST_H
-#define BINARYEXPRAST_H
+#ifndef BINARYEXPRAST_HPP
+#define BINARYEXPRAST_HPP
 
-#include "ExprAST.h"
+#include "ExprAST.hpp"
 
 //syntax tree for binary
 class BinaryExprAST: public ExprAST {

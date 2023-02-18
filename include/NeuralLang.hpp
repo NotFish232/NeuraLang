@@ -2,20 +2,20 @@
 // Created by piuslee on 2/18/23.
 //
 
-#ifndef NEURALLANG_H
-#define NEURALLANG_H
+#ifndef NEURALLANG_HPP
+#define NEURALLANG_HPP
 
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Verifier.h"
+#include "llvm/ADT/APFloat.hpp"
+#include "llvm/ADT/STLExtras.hpp"
+#include "llvm/IR/BasicBlock.hpp"
+#include "llvm/IR/Constants.hpp"
+#include "llvm/IR/DerivedTypes.hpp"
+#include "llvm/IR/Function.hpp"
+#include "llvm/IR/IRBuilder.hpp"
+#include "llvm/IR/LLVMContext.hpp"
+#include "llvm/IR/Module.hpp"
+#include "llvm/IR/Type.hpp"
+#include "llvm/IR/Verifier.hpp"
 #include <map>
 
 // This is an object that owns LLVM core data structures

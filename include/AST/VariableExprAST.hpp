@@ -2,10 +2,10 @@
 // Created by piuslee on 2/18/23.
 //
 
-#ifndef VARIABLEEXPRAST_H
-#define VARIABLEEXPRAST_H
+#ifndef VARIABLEEXPRAST_HPP
+#define VARIABLEEXPRAST_HPP
 
-#include "ExprAST.h"
+#include "ExprAST.hpp"
 
 //abstract syntax tree for numeric values
 class NumberExprAST: public ExprAST {
