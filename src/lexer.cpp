@@ -49,7 +49,7 @@ Token Lexer::getToken() {
             m_inputStream->get(lastChar);
         } while (isdigit(lastChar) || lastChar == '.');
 
-        return {TokenType::_number, "", strtod(numStr.c_str(), 0)};
+        return Token{TokenType::_number, "", strtod(numStr.c_str(), 0)};
     }
 
     if (lastChar == '#') {
@@ -57,16 +57,8 @@ Token Lexer::getToken() {
             m_inputStream->get(lastChar);
         } while (lastChar != EOF && lastChar != '\n' && lastChar != '\r');
 
-        if (!lastChar != EOF) return getToken(stream);
-    }   
-
-    if (lastChar == EOF) return Token::_eof;
-
-    return lastChar;
-}
-
-    if (lastChar == EOF) {
-        return Token{TokenType::_eof};
+        if (lastChar != EOF)
+            return getToken();
     }
 
     return Token{TokenType::_unknownToken, "" + lastChar};
