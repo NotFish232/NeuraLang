@@ -10,6 +10,9 @@
     } while (false)
 
 #include "include/lexer.hpp"
+#include <iostream>
+
+using namespace std;
 
 int main(int argc, char **argv){
     int passingTests = 0, totalTests = 0;
@@ -19,5 +22,8 @@ int main(int argc, char **argv){
     Lexer lexer("examples/hello_world.nl");
 
     Token token;
-    while ()
+    do {
+        token = lexer.getToken();
+        cout << token.identifier << '\n';
+    } while (token.type != TokenType::_eof);
 }
