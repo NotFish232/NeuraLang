@@ -3,7 +3,6 @@
 //
 
 #include "../../include/AST/BinaryExprAST.hpp"
-#include "../../include/NeuralLang.hpp"
 
 llvm::Value *BinaryExprAST::codegen() {
     llvm::Value *L = LHS->codegen();
@@ -11,7 +10,7 @@ llvm::Value *BinaryExprAST::codegen() {
 
     if (!L || !R) return nullptr;
 
-    switch (Op) {
+    switch (operation) {
         case '+':
             return builder.CreateFAdd(L, R, "addtmp");
         case '-':

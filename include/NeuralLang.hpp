@@ -26,9 +26,9 @@ extern llvm::LLVMContext ctx;
 extern llvm::IRBuilder<> builder;
 
 // This is an LLVM construct that contains functions and global variables
-extern std::unique_ptr<llvm::Module> module;
+extern std::unique_ptr<llvm::Module> mod;
 
 // This map keeps track of which values are defined in the current scope
-extern std::map<std::string, llvm::Value *> valuesMaps;
+extern std::map<std::string, llvm::Value *> values;
 
 #endif

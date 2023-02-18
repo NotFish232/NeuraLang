@@ -7,13 +7,12 @@
 
 #include "ExprAST.hpp"
 
-//abstract syntax tree for numeric values
-class NumberExprAST: public ExprAST {
-    double Val;
+//syntax tree for variables
+class VariableExprAST : public ExprAST {
+    std::string Name;
 
 public:
-    //initializer list, assigns variable to class.  think getters & setters
-    NumberExprAST(double Val): Val(Val) {}
+    VariableExprAST(const std::string &Name) : Name(Name) {}
     llvm::Value *codegen() override;
 };
 

@@ -6,16 +6,14 @@
 #define BINARYEXPRAST_HPP
 
 #include "ExprAST.hpp"
-#include "../Logger.hpp"
-#include <llvm/IR/IRBuilder.h>
 
 //syntax tree for binary
 class BinaryExprAST: public ExprAST {
-    char Op;
+    char operation;
     std::unique_ptr < ExprAST > LHS, RHS;
 
 public:
-    BinaryExprAST(char op, std::unique_ptr < ExprAST > LHS, std::unique_ptr < ExprAST > RHS): Op(Op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
+    BinaryExprAST(char op, std::unique_ptr < ExprAST > LHS, std::unique_ptr < ExprAST > RHS): operation(operation), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
     llvm::Value *codegen() override;
 };
 
