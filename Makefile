@@ -20,16 +20,21 @@ vpath %.o $(BIN)
 all: build run;
 
 
-build: $(BIN)/main.out;
+build: $(BIN)/main.out $(BIN)/tests.out;
 
 
 run: $(BIN)/main.out
 	$(BIN)/main.out
 
+tests: $(BIN)/tests.out
+	$(BIN)/tests.out
+
 
 ./bin/main.out:  $(BIN) $(DEP_FILES) main.cpp
 	$(COMPILE) main.cpp $(patsubst %, $(BIN)/%, $(DEP_FILES)) -o $(BIN)/main.out
 
+./bin/tests.out: $(BIN) $(DEP_FILES) tests.cpp
+	$(COMPILE) tests.cpp $(patsubst %, $(BIN)/%, $(DEP_FILES)) -o $(BIN)/tests.out
 
 %.o: %.cpp
 	$(COMPILE) -c $^ -o $(BIN)/$@
