@@ -56,7 +56,7 @@ Token Lexer::_getNextToken() {
             return Token{TokenType::_extern, "", 0};
         }
 
-        return Token{TokenType::_unknownIdentifier, identifier, 0};
+        return Token{TokenType::_identifier, identifier, 0};
     }
 
     // Stacking together only numeric values

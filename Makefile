@@ -23,7 +23,7 @@ all: std build run;
 
 
 std: $(TEMP) $(STD_DEP_FILES)
-	llvm-link $(STD_DEP_FILES) -S -o $(IR)/out.ll
+	llvm-link $(STD_DEP_FILES) -S -o $(IR)/std.ll
 	rm -r $(TEMP)
 	
 
