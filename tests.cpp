@@ -22,8 +22,9 @@ int main(int argc, char **argv){
     Lexer lexer("examples/hello_world.nl");
 
     Token token;
+    int i = 0;
     do {
         token = lexer.getToken();
-        cout << token.identifier << '\n';
+        cout << (i++) << " " << token.identifier << '\n';
     } while (token.type != TokenType::_eof);
 }

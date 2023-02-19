@@ -14,8 +14,12 @@ Lexer::Lexer(istream &inputStream) {
 Token Lexer::getToken() {
     char lastChar = ' ';
 
-    while (isspace(lastChar)) {
+    while (isspace(lastChar) && !m_inputStream->eof()) {
         m_inputStream->get(lastChar);
+    }
+
+    if (m_inputStream->eof()) {
+        return Token{TokenType::_eof, "", 0};
     }
 
     if (isalpha(lastChar)) {
@@ -27,14 +31,14 @@ Token Lexer::getToken() {
         } while (isalpha(lastChar));
 
         if (identifier == "def") {
-            return Token{TokenType::_def};
+            return Token{TokenType::_def, "", 0};
         }
 
         if (identifier == "extern") {
-            return Token{TokenType::_extern};
+            return Token{TokenType::_extern, "", 0};
         }
 
-        return Token{TokenType::_unknownIdentifier, identifier};
+        return Token{TokenType::_unknownIdentifier, identifier, 0};
     }
 
     // Stacking together only numeric values
@@ -52,11 +56,12 @@ Token Lexer::getToken() {
     if (lastChar == '#') {
         do {
             m_inputStream->get(lastChar);
-        } while (lastChar != EOF && lastChar != '\n' && lastChar != '\r');
+        } while (!m_inputStream->eof() && lastChar != '\n' && lastChar != '\r');
 
-        if (lastChar != EOF)
+        if (lastChar != EOF) {
             return getToken();
+        }
     }
 
-    return Token{TokenType::_unknownToken, "" + lastChar};
+    return Token{TokenType::_unknownToken, "" + lastChar, 0};
 }
