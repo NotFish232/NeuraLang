@@ -9,7 +9,7 @@
         totalTest++;                                                                                         \
     } while (false)
 
-#include "include/Lexer.hpp"
+#include "include/lexer.hpp"
 #include <iostream>
 
 using namespace std;

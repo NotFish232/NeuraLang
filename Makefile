@@ -5,9 +5,8 @@ COMPILE := $(COMPILER)
 SRC := ./src
 BIN := ./bin
 
-
-SOURCE_FILES := $(shell find $(SRC)/ -type f -name '*.cpp')
-DEP_FILES := $(patsubst %.cpp, %.o, $(SOURCE_FILES))
+SOURCE_FILES := $(shell find src -name "*.cpp")
+DEP_FILES := $(patsubst %.cpp, $(BIN)/%.o, $(notdir $(SOURCE_FILES)))
 
 
 all: build run;
@@ -29,11 +28,15 @@ tests: $(BIN)/tests.out
 
 
 ./bin/tests.out: $(BIN) $(DEP_FILES) tests.cpp
-	$(COMPILE) tests.cpp $(BIN)/*.o  -o $(BIN)/tests.out $(FLAGS)
+	$(COMPILE) tests.cpp $(BIN)/*.o -o $(BIN)/tests.out $(FLAGS)
 
 
-%.o: %.cpp
-	$(COMPILE) -c $^ -o $(BIN)/$(notdir $@)
+
+$(BIN)/%.o: src/%.cpp
+	$(COMPILE) -c $^ -o $@
+
+$(BIN)/%.o: src/*/%.cpp
+	$(COMPILE) -c $^ -o $@
 
 
 $(BIN):
@@ -43,5 +46,4 @@ $(BIN):
 clean: 
 	rm -rf ./bin/*
 
-
-.PHONY: all build run clean;
+.PHONY: all build run clean tests;
