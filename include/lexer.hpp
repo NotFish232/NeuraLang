@@ -24,11 +24,10 @@ struct Token {
 
 class Lexer {
 private:
-    std::istream *m_inputStream;
+    std::istream &m_inputStream;
 
 public:
     Lexer() = delete;
-    Lexer(const std::string &filename);
     Lexer(std::istream &inputStream);
 
     Token getToken();

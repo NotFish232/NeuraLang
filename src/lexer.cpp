@@ -3,22 +3,17 @@
 using namespace std;
 using namespace nl;
 
-Lexer::Lexer(const string &filename) {
-    m_inputStream = new ifstream(filename, ios::in);
-}
-
-Lexer::Lexer(istream &inputStream) {
-    m_inputStream = &inputStream;
+Lexer::Lexer(istream &inputStream): m_inputStream(inputStream) {
 }
 
 Token Lexer::getToken() {
     char lastChar = ' ';
 
-    while (isspace(lastChar) && !m_inputStream->eof()) {
-        m_inputStream->get(lastChar);
+    while (isspace(lastChar) && !m_inputStream.eof()) {
+        m_inputStream.get(lastChar);
     }
 
-    if (m_inputStream->eof()) {
+    if (m_inputStream.eof()) {
         return Token{TokenType::_eof, "", 0};
     }
 
@@ -27,7 +22,7 @@ Token Lexer::getToken() {
 
         do {
             identifier += lastChar;
-            m_inputStream->get(lastChar);
+            m_inputStream.get(lastChar);
         } while (isalpha(lastChar));
 
         if (identifier == "def") {
@@ -47,7 +42,7 @@ Token Lexer::getToken() {
 
         do {
             numStr += lastChar;
-            m_inputStream->get(lastChar);
+            m_inputStream.get(lastChar);
         } while (isdigit(lastChar) || lastChar == '.');
 
         return Token{TokenType::_number, "", strtod(numStr.c_str(), 0)};
@@ -55,8 +50,8 @@ Token Lexer::getToken() {
 
     if (lastChar == '#') {
         do {
-            m_inputStream->get(lastChar);
-        } while (!m_inputStream->eof() && lastChar != '\n' && lastChar != '\r');
+            m_inputStream.get(lastChar);
+        } while (!m_inputStream.eof() && lastChar != '\n' && lastChar != '\r');
 
         if (lastChar != EOF) {
             return getToken();
