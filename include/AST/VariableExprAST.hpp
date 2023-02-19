@@ -7,7 +7,7 @@
 
 #include "ExprAST.hpp"
 
-//syntax tree for variables
+// syntax tree for variables
 class VariableExprAST : public ExprAST {
     std::string Name;
 

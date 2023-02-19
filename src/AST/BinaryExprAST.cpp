@@ -21,6 +21,7 @@ llvm::Value *BinaryExprAST::codegen() {
             L = builder.CreateFCmpULT(L, R, "cmptmp");
             return builder.CreateUIToFP(L, llvm::Type::getDoubleTy(ctx), "booltmp");
         default:
-            return LogErrorV("Invalid binary operator");
+            Logger::error("Invalid binary operator");
+            return nullptr;
     }
 }

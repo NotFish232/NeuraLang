@@ -7,7 +7,8 @@
 llvm::Value *VariableExprAST::codegen() {
     llvm::Value *V = values[Name];
 
-    if(!V) LogErrorV("unknown var name");
+    if (!V)
+        Logger::error("unknown var name");
 
     return V;
 }

@@ -7,17 +7,17 @@
 
 #include "ExprAST.hpp"
 
-//prototype function syntax tree, captures the name and the arguments
-//basically represents the function, as a prototype.
+// prototype function syntax tree, captures the name and the arguments
+// basically represents the function, as a prototype.
 class PrototypeAST {
     std::string Name;
-    std::vector < std::string > Args;
+    std::vector<std::string> Args;
 
 public:
-    PrototypeAST(const std::string & Name, std::vector < std::string > Args): Name(Name), Args(std::move(Args)) {}
+    PrototypeAST(const std::string &Name, std::vector<std::string> Args) : Name(Name), Args(std::move(Args)) {}
 
     llvm::Function *codegen();
-    const std::string & getName() const {
+    const std::string &getName() const {
         return Name;
     }
 };

@@ -7,13 +7,13 @@
 
 #include "ExprAST.hpp"
 
-//syntax tree for binary
-class BinaryExprAST: public ExprAST {
+// syntax tree for binary
+class BinaryExprAST : public ExprAST {
     char operation;
-    std::unique_ptr < ExprAST > LHS, RHS;
+    std::unique_ptr<ExprAST> LHS, RHS;
 
 public:
-    BinaryExprAST(char op, std::unique_ptr < ExprAST > LHS, std::unique_ptr < ExprAST > RHS): operation(operation), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
+    BinaryExprAST(char op, std::unique_ptr<ExprAST> LHS, std::unique_ptr<ExprAST> RHS) : operation(operation), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
     llvm::Value *codegen() override;
 };
 

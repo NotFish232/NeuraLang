@@ -8,14 +8,14 @@
 #include "ExprAST.hpp"
 #include "PrototypeAST.hpp"
 
-//function syntax tree
-//this represents the function itself.
+// function syntax tree
+// this represents the function itself.
 class FunctionAST {
-    std::unique_ptr < PrototypeAST > Proto;
-    std::unique_ptr < ExprAST > Body;
+    std::unique_ptr<PrototypeAST> Proto;
+    std::unique_ptr<ExprAST> Body;
 
 public:
-    FunctionAST(std::unique_ptr < PrototypeAST > Proto, std::unique_ptr < ExprAST > Body): Proto(std::move(Proto)), Body(std::move(Body)) {}
+    FunctionAST(std::unique_ptr<PrototypeAST> Proto, std::unique_ptr<ExprAST> Body) : Proto(std::move(Proto)), Body(std::move(Body)) {}
     llvm::Function *codegen();
 };
 

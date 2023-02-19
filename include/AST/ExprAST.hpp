@@ -5,11 +5,11 @@
 #ifndef EXPRAST_HPP
 #define EXPRAST_HPP
 
-#include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/BasicBlock.h>
+#include <llvm/IR/IRBuilder.h>
 
 #include "../../include/NeuralLang.hpp"
-#include "../Logger/Logger.hpp"
+#include "../logger.hpp"
 
 // base class for all
 class ExprAST {
