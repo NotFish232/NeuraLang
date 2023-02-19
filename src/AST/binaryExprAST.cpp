@@ -2,15 +2,21 @@
 // Created by piuslee on 2/18/23.
 //
 
-#include "../../include/AST/BinaryExprAST.hpp"
+#include "../../include/AST/binaryExprAST.hpp"
 
-llvm::Value *BinaryExprAST::codegen() {
-    llvm::Value *L = LHS->codegen();
-    llvm::Value *R = RHS->codegen();
+using namespace std;
+using namespace llvm;
+
+BinaryExprAST::BinaryExprAST(char op, unique_ptr<ExprAST> left, unique_ptr<ExprAST> right)
+: m_operator(op), m_left(move(left)), m_right(move(right)) {}
+
+Value *BinaryExprAST::codegen() {
+    Value *L = m_left->codegen();
+    Value *R = m_right->codegen();
 
     if (!L || !R) return nullptr;
 
-    switch (operation) {
+    switch (m_operator) {
         case '+':
             return builder.CreateFAdd(L, R, "addtmp");
         case '-':
@@ -19,7 +25,7 @@ llvm::Value *BinaryExprAST::codegen() {
             return builder.CreateFMul(L, R, "multmp");
         case '<':
             L = builder.CreateFCmpULT(L, R, "cmptmp");
-            return builder.CreateUIToFP(L, llvm::Type::getDoubleTy(ctx), "booltmp");
+            return builder.CreateUIToFP(L, Type::getDoubleTy(ctx), "booltmp");
         default:
             Logger::error("Invalid binary operator");
             return nullptr;

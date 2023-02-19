@@ -24,9 +24,6 @@ struct Token {
 
 class Lexer {
 private:
-    const static std::string functionDefinition;
-    const static std::string externDefinition;
-
     std::istream *m_inputStream;
 
 public:

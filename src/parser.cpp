@@ -2,7 +2,7 @@
 // Created by piuslee on 2/18/23.
 //
 
-#include "../../include/Parser/Parser.hpp"
+#include "../include/parser.hpp"
 
 std::map<char, int> BinaryOperationPrecedence;
 

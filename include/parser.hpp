@@ -7,15 +7,15 @@
 
 #include <map>
 
-#include "../AST/BinaryExprAST.hpp"
-#include "../AST/CallExprAST.hpp"
-#include "../AST/ExprAST.hpp"
-#include "../AST/FunctionAST.hpp"
-#include "../AST/NumberExprAST.hpp"
-#include "../AST/PrototypeAST.hpp"
-#include "../AST/VariableExprAST.hpp"
+#include "AST/binaryExprAST.hpp"
+#include "AST/callExprAST.hpp"
+#include "AST/exprAST.hpp"
+#include "AST/functionAST.hpp"
+#include "AST/numberExprAST.hpp"
+#include "AST/prototypeAST.hpp"
+#include "AST/variableExprAST.hpp"
 
-#include "../Lexer.hpp"
+#include "lexer.hpp"
 
 extern std::map<char, int> BinopPrecedence;
 std::unique_ptr<ExprAST> ParseNumberExpr();

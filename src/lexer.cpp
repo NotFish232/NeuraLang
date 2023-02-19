@@ -1,10 +1,7 @@
-#include "../include/Lexer.hpp"
+#include "../include/lexer.hpp"
 
 using namespace std;
 using namespace nl;
-
-const string Lexer::functionDefinition = "def";
-const string Lexer::externDefinition = "extern";
 
 Lexer::Lexer(const string &filename) {
     m_inputStream = new ifstream(filename, ios::in);

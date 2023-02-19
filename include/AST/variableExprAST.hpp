@@ -5,14 +5,14 @@
 #ifndef VARIABLEEXPRAST_HPP
 #define VARIABLEEXPRAST_HPP
 
-#include "ExprAST.hpp"
+#include "exprAST.hpp"
 
 // syntax tree for variables
 class VariableExprAST : public ExprAST {
-    std::string Name;
+    std::string m_name;
 
 public:
-    VariableExprAST(const std::string &Name) : Name(Name) {}
+    VariableExprAST(const std::string &Name);
     llvm::Value *codegen() override;
 };
 

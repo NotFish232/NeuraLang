@@ -2,7 +2,7 @@
 // Created by piuslee on 2/18/23.
 //
 
-#include "../include/NeuralLang.hpp"
+#include "../include/neuralLang.hpp"
 
 // This is an object that owns LLVM core data structures
 llvm::LLVMContext ctx;

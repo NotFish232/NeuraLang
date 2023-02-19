@@ -5,15 +5,15 @@
 #ifndef NUMBEREXPRAST_HPP
 #define NUMBEREXPRAST_HPP
 
-#include "ExprAST.hpp"
+#include "exprAST.hpp"
 
 // abstract syntax tree for numeric values
 class NumberExprAST : public ExprAST {
-    double Val;
+    double m_val;
 
 public:
     // initializer list, assigns variable to class.  think getters & setters
-    NumberExprAST(double Val) : Val(Val) {}
+    NumberExprAST(double val);
     llvm::Value *codegen() override;
 };
 
