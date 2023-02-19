@@ -11,14 +11,14 @@ CallExprAST::CallExprAST(const string &funcName, vector<unique_ptr<ExprAST>> arg
     : m_funcName(funcName), m_args(move(args)) {}
 
 Value *CallExprAST::codegen() {
-    Function *CalleeF = mod->getFunction(m_funcName);
+    Function *FunctionCallee = mod->getFunction(m_funcName);
 
-    if (!CalleeF) {
+    if (!FunctionCallee) {
         Logger::error("Unknown function referenced");
         return nullptr;
     }
 
-    if (CalleeF->arg_size() != m_args.size()) {
+    if (FunctionCallee->arg_size() != m_args.size()) {
         Logger::error("Incorrect # arguments passed");
         return nullptr;
     }
@@ -32,5 +32,5 @@ Value *CallExprAST::codegen() {
         }
     }
 
-    return builder.CreateCall(CalleeF, ArgsV, "calltmp");
+    return builder->CreateCall(FunctionCallee, ArgsV, "calltmp");
 }

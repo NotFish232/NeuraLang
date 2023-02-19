@@ -4,33 +4,26 @@
 #include <fstream>
 #include <sstream>
 
+#include "token.hpp"
+
 namespace nl {
-
-enum class TokenType {
-    _eof,
-    _def,
-    _extern,
-    _identifier,
-    _number,
-    _unknownIdentifier,
-    _unknownToken
-};
-
-struct Token {
-    TokenType type;
-    std::string identifier;
-    double numVal;
-};
 
 class Lexer {
 private:
-    std::istream &m_inputStream;
+    char m_lastChar;
+    std::istream *m_inputStream;
+    Token m_currentToken;
+
+    Token _getNextToken();
 
 public:
-    Lexer() = delete;
+    Lexer();
     Lexer(std::istream &inputStream);
 
-    Token getToken();
+    void setStream(std::istream &inputStream);
+
+    Token getCurrentToken();
+    Token getNextToken();
 };
 
 }

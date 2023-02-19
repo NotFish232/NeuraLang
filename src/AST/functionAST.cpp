@@ -8,7 +8,7 @@ using namespace std;
 using namespace llvm;
 
 FunctionAST::FunctionAST(unique_ptr<PrototypeAST> proto, unique_ptr<ExprAST> body) 
-: m_proto(move(proto)), m_body(move(body)) {}
+: m_proto(std::move(proto)), m_body(std::move(body)) {}
 
 Function *FunctionAST::codegen() {
     Function *function = mod->getFunction(m_proto->getName());
@@ -18,8 +18,8 @@ Function *FunctionAST::codegen() {
     if (!function)
         return nullptr;
 
-    BasicBlock *block = BasicBlock::Create(ctx, "entry", function);
-    builder.SetInsertPoint(block);
+    BasicBlock *block = BasicBlock::Create(*ctx, "entry", function);
+    builder->SetInsertPoint(block);
     values.clear();
 
     for (auto &Arg : function->args()) {
@@ -27,7 +27,7 @@ Function *FunctionAST::codegen() {
     }
 
     if (Value *returnedValue = m_body->codegen()) {
-        builder.CreateRet(returnedValue);
+        builder->CreateRet(returnedValue);
         verifyFunction(*function);
 
         return function;

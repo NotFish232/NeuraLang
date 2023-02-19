@@ -1,19 +1,41 @@
 #include "../include/lexer.hpp"
+#include "../include/token.hpp"
 
 using namespace std;
 using namespace nl;
 
-Lexer::Lexer(istream &inputStream): m_inputStream(inputStream) {
+Lexer::Lexer() {
+    m_lastChar = ' ';
+    m_inputStream = nullptr;
+    m_currentToken = Token{TokenType::_null, "", 0};
 }
 
-Token Lexer::getToken() {
-    char lastChar = ' ';
+Lexer::Lexer(istream &inputStream) {
+    m_lastChar = ' ';
+    m_inputStream = &inputStream;
+    m_currentToken = Token{TokenType::_null, "", 0};
+}
 
-    while (isspace(lastChar) && !m_inputStream.eof()) {
-        m_inputStream.get(lastChar);
+void Lexer::setStream(istream &inputStream) {
+    m_inputStream = &inputStream;
+}
+
+Token Lexer::getCurrentToken() {
+    return m_currentToken;
+}
+
+Token Lexer::getNextToken() {
+    return m_currentToken = _getNextToken();
+}
+
+Token Lexer::_getNextToken() {
+    char lastChar = m_lastChar;
+    m_lastChar = ' ';
+    while (isspace(lastChar) && !m_inputStream->eof()) {
+        m_inputStream->get(lastChar);
     }
 
-    if (m_inputStream.eof()) {
+    if (m_inputStream->eof()) {
         return Token{TokenType::_eof, "", 0};
     }
 
@@ -22,8 +44,9 @@ Token Lexer::getToken() {
 
         do {
             identifier += lastChar;
-            m_inputStream.get(lastChar);
+            m_inputStream->get(lastChar);
         } while (isalpha(lastChar));
+        m_lastChar = lastChar;
 
         if (identifier == "def") {
             return Token{TokenType::_def, "", 0};
@@ -42,21 +65,29 @@ Token Lexer::getToken() {
 
         do {
             numStr += lastChar;
-            m_inputStream.get(lastChar);
+            m_inputStream->get(lastChar);
         } while (isdigit(lastChar) || lastChar == '.');
+        m_lastChar = lastChar;
 
         return Token{TokenType::_number, "", strtod(numStr.c_str(), 0)};
     }
 
+    if (lastChar == '(') {
+        return Token{TokenType::_leftParen, "(g", 0};
+    }
+    if (lastChar == ')') {
+        return Token{TokenType::_rightParen, ")", 0};
+    }
+
     if (lastChar == '#') {
         do {
-            m_inputStream.get(lastChar);
-        } while (!m_inputStream.eof() && lastChar != '\n' && lastChar != '\r');
+            m_inputStream->get(lastChar);
+        } while (!m_inputStream->eof() && lastChar != '\n' && lastChar != '\r');
 
         if (lastChar != EOF) {
-            return getToken();
+            return _getNextToken();
         }
     }
 
-    return Token{TokenType::_unknownToken, "" + lastChar, 0};
+    return Token{TokenType::_unknownToken, string(1, lastChar), 0};
 }
