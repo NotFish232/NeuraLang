@@ -22,6 +22,7 @@ Parser::Parser(const string &filename) {
 }
 
 void Parser::parse() {
+    m_lexer.getNextToken();
     while (m_lexer.getCurrentToken().type != TokenType::_eof) {
         switch (m_lexer.getCurrentToken().type) {
         case TokenType::_def:
@@ -59,8 +60,10 @@ unique_ptr<ExprAST> Parser::parseParenExpr() {
     m_lexer.getNextToken();
 
     auto V = parseExpression();
-    if (!V)
+    if (!V){
         return nullptr;
+    }
+
 
     if (m_lexer.getCurrentToken().type != TokenType::_rightParen) {
         logger.error("expected )");
@@ -75,6 +78,7 @@ unique_ptr<ExprAST> Parser::parseParenExpr() {
 unique_ptr<ExprAST> Parser::parseIdentifierExpr() {
     string id = m_lexer.getCurrentToken().identifier;
     m_lexer.getNextToken(); // eat
+
 
     if (m_lexer.getCurrentToken().identifier != "(")
         return std::make_unique<VariableExprAST>(id);
@@ -147,8 +151,7 @@ unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, un
 // expression parsing
 unique_ptr<ExprAST> Parser::parseExpression() {
     auto LHS = parsePrimary();
-    if (!LHS)
-        return nullptr;
+    if (!LHS) return nullptr;
 
     return parseBinaryOperationRHS(0, std::move(LHS));
 }
@@ -243,6 +246,8 @@ void Parser::handleTopLevelExpression() {
             fprintf(stderr, "read top-level expression:");
             FnIR->print(errs());
             fprintf(stderr, "\n");
+
+            FnIR->eraseFromParent();
         }
     } else {
         m_lexer.getNextToken();

@@ -1,1 +1,1 @@
-print(1+2)
+def foo(a b) a*a
