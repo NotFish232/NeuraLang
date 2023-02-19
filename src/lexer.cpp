@@ -1,59 +1,88 @@
 #include "../include/lexer.hpp"
-#include "../include/token.h"
+#include "../include/token.hpp"
 
 using namespace std;
+using namespace nl;
 
-int curTok;
-string identifierStr;
-double numerical;
+Lexer::Lexer() {
+    m_inputStream = nullptr;
+    m_currentToken = Token{TokenType::_null, "", 0};
+}
 
-int getToken() {
-    static int lastChar = ' ';
-    while(isspace(lastChar)) lastChar = getchar();
+Lexer::Lexer(istream &inputStream) {
+    m_inputStream = &inputStream;
+}
 
-    //identifier & keyword handling
-    if(isalpha(lastChar)) {
-        identifierStr = lastChar;
-        while(isalnum(lastChar = getchar())) identifierStr += lastChar;
+void Lexer::setStream(istream &inputStream) {
+    m_inputStream = &inputStream;
+}
 
-        if(identifierStr == "def") return tok_def;
-        if(identifierStr == "extern") return tok_extern;
-        return tok_identifier;
+Token Lexer::getCurrentToken() {
+    return m_currentToken;
+}
+
+Token Lexer::getNextToken() {
+    return m_currentToken = _getNextToken();
+}
+
+Token Lexer::_getNextToken() {
+    char lastChar = ' ';
+
+    while (isspace(lastChar) && !m_inputStream->eof()) {
+        m_inputStream->get(lastChar);
     }
 
-    //number handling
-    if(isdigit(lastChar) || lastChar == '.') {
-        //eat all number-qualifying chars
-        string buffer;
+    if (m_inputStream->eof()) {
+        return Token{TokenType::_eof, "", 0};
+    }
+
+    if (isalpha(lastChar)) {
+        string identifier = "";
+
         do {
-            buffer += lastChar;
-            lastChar = getchar();
+            identifier += lastChar;
+            m_inputStream->get(lastChar);
+        } while (isalpha(lastChar));
+
+        if (identifier == "def") {
+            return Token{TokenType::_def, "", 0};
+        }
+
+        if (identifier == "extern") {
+            return Token{TokenType::_extern, "", 0};
+        }
+
+        return Token{TokenType::_unknownIdentifier, identifier, 0};
+    }
+
+    // Stacking together only numeric values
+    if (isdigit(lastChar) || lastChar == '.') {
+        std::string numStr;
+
+        do {
+            numStr += lastChar;
+            m_inputStream->get(lastChar);
         } while (isdigit(lastChar) || lastChar == '.');
 
-        //convert string to number
-        numerical = strtod(buffer.c_str(), 0);
-
-        return tok_number;
+        return Token{TokenType::_number, "", strtod(numStr.c_str(), 0)};
     }
 
-    //comment handling
-    if(lastChar == '#') {
-        do lastChar = getchar();
-        while (lastChar != EOF && lastChar != '\n' && lastChar != '\r'); //i hate windows users
+    if (lastChar == '(') {
+        return Token{TokenType::_leftParen, "", 0};
+    }
+    if (lastChar == ')') {
+        return Token{TokenType::_rightParen, "", 0};
+    }
 
-        if(lastChar == EOF) {
-            return ::getToken();
+    if (lastChar == '#') {
+        do {
+            m_inputStream->get(lastChar);
+        } while (!m_inputStream->eof() && lastChar != '\n' && lastChar != '\r');
+
+        if (lastChar != EOF) {
+            return _getNextToken();
         }
     }
 
-    //exceptional handling
-    if(lastChar == EOF) return tok_eof;
-
-    int temp = lastChar;
-    lastChar = getchar(); //eat
-    return temp;
-}
-
-int getNextToken() {
-    return curTok = ::getToken();
+    return Token{TokenType::_unknownToken, "" + lastChar, 0};
 }

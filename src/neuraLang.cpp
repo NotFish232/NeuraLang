@@ -2,7 +2,7 @@
 // Created by piuslee on 2/18/23.
 //
 
-#include "../include/neuralLang.hpp"
+#include "../include/neuraLang.hpp"
 
 using namespace std;
 using namespace llvm;

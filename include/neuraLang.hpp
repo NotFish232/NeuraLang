@@ -2,8 +2,8 @@
 // Created by piuslee on 2/18/23.
 //
 
-#ifndef NEURALLANG_HPP
-#define NEURALLANG_HPP
+#ifndef NEURALANG_HPP
+#define NEURALANG_HPP
 
 #include <llvm/ADT/APFloat.h>
 #include <llvm/ADT/APFloat.h>

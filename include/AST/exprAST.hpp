@@ -8,7 +8,7 @@
 #include <llvm/IR/BasicBlock.h>
 #include <llvm/IR/IRBuilder.h>
 
-#include "../../include/neuralLang.hpp"
+#include "../../include/neuraLang.hpp"
 #include "../logger.hpp"
 
 // base class for all

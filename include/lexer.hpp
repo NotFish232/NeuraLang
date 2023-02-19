@@ -1,15 +1,30 @@
 #ifndef LEXER_HPP
 #define LEXER_HPP
 
-#include <cstdlib>
-#include <string>
+#include <fstream>
+#include <sstream>
 
-extern int curTok;
+#include "token.hpp"
 
-int getToken();
-int getNextToken();
+namespace nl {
 
-extern std::string identifierStr;
-extern double numerical;
+class Lexer {
+private:
+    std::istream *m_inputStream;
+    Token m_currentToken;
+
+    Token _getNextToken();
+
+public:
+    Lexer();
+    Lexer(std::istream &inputStream);
+
+    void setStream(std::istream &inputStream);
+
+    Token getCurrentToken();
+    Token getNextToken();
+};
+
+}
 
 #endif
