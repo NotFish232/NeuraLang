@@ -16,17 +16,18 @@
 #include "AST/variableExprAST.hpp"
 
 #include "lexer.hpp"
+#include "token.h"
 
-extern std::map<char, int> BinopPrecedence;
-std::unique_ptr<ExprAST> ParseNumberExpr();
-std::unique_ptr<ExprAST> ParseParenExpr();
-std::unique_ptr<ExprAST> ParseIdentifierExpr();
-std::unique_ptr<ExprAST> ParsePrimary();
-std::unique_ptr<ExprAST> ParseBinaryOperationRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS);
-std::unique_ptr<ExprAST> ParseExpression();
-std::unique_ptr<PrototypeAST> ParsePrototype();
-std::unique_ptr<FunctionAST> ParseDefinition();
-std::unique_ptr<FunctionAST> ParseTopLevelExpr();
-std::unique_ptr<PrototypeAST> ParseExtern();
+extern std::map<char, int> binopPrecedence;
+std::unique_ptr<ExprAST> parseNumberExpr();
+std::unique_ptr<ExprAST> parseParenExpr();
+std::unique_ptr<ExprAST> parseIdentifierExpr();
+std::unique_ptr<ExprAST> parsePrimary();
+std::unique_ptr<ExprAST> parseBinaryOperationRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS);
+std::unique_ptr<ExprAST> parseExpression();
+std::unique_ptr<PrototypeAST> parsePrototype();
+std::unique_ptr<FunctionAST> parseDefinition();
+std::unique_ptr<FunctionAST> parseTopLevelExpr();
+std::unique_ptr<PrototypeAST> parseExtern();
 
 #endif

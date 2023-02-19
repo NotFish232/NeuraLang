@@ -19,6 +19,8 @@
 #include <llvm/IR/Verifier.h>
 #include <map>
 
+#include "logger.hpp"
+
 // This is an object that owns LLVM core data structures
 extern llvm::LLVMContext ctx;
 
@@ -30,5 +32,8 @@ extern std::unique_ptr<llvm::Module> mod;
 
 // This map keeps track of which values are defined in the current scope
 extern std::map<std::string, llvm::Value *> values;
+
+// This is the global logger.
+extern Logger logger;
 
 #endif

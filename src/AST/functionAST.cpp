@@ -8,7 +8,7 @@ using namespace std;
 using namespace llvm;
 
 FunctionAST::FunctionAST(unique_ptr<PrototypeAST> proto, unique_ptr<ExprAST> body) 
-: m_proto(move(proto)), m_body(move(body)) {}
+: m_proto(std::move(proto)), m_body(std::move(body)) {}
 
 Function *FunctionAST::codegen() {
     Function *function = mod->getFunction(m_proto->getName());

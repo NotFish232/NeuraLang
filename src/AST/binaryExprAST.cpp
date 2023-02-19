@@ -7,8 +7,7 @@
 using namespace std;
 using namespace llvm;
 
-BinaryExprAST::BinaryExprAST(char op, unique_ptr<ExprAST> left, unique_ptr<ExprAST> right)
-: m_operator(op), m_left(move(left)), m_right(move(right)) {}
+BinaryExprAST::BinaryExprAST(char op, unique_ptr<ExprAST> left, unique_ptr<ExprAST> right): m_operator(op), m_left(std::move(left)), m_right(std::move(right)) {}
 
 Value *BinaryExprAST::codegen() {
     Value *L = m_left->codegen();

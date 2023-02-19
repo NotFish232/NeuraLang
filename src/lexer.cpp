@@ -1,62 +1,59 @@
 #include "../include/lexer.hpp"
+#include "../include/token.h"
 
 using namespace std;
-using namespace nl;
 
-Lexer::Lexer(istream &inputStream): m_inputStream(inputStream) {
-}
+int curTok;
+string identifierStr;
+double numerical;
 
-Token Lexer::getToken() {
-    char lastChar = ' ';
+int getToken() {
+    static int lastChar = ' ';
+    while(isspace(lastChar)) lastChar = getchar();
 
-    while (isspace(lastChar) && !m_inputStream.eof()) {
-        m_inputStream.get(lastChar);
+    //identifier & keyword handling
+    if(isalpha(lastChar)) {
+        identifierStr = lastChar;
+        while(isalnum(lastChar = getchar())) identifierStr += lastChar;
+
+        if(identifierStr == "def") return tok_def;
+        if(identifierStr == "extern") return tok_extern;
+        return tok_identifier;
     }
 
-    if (m_inputStream.eof()) {
-        return Token{TokenType::_eof, "", 0};
-    }
-
-    if (isalpha(lastChar)) {
-        string identifier = "";
-
+    //number handling
+    if(isdigit(lastChar) || lastChar == '.') {
+        //eat all number-qualifying chars
+        string buffer;
         do {
-            identifier += lastChar;
-            m_inputStream.get(lastChar);
-        } while (isalpha(lastChar));
-
-        if (identifier == "def") {
-            return Token{TokenType::_def, "", 0};
-        }
-
-        if (identifier == "extern") {
-            return Token{TokenType::_extern, "", 0};
-        }
-
-        return Token{TokenType::_unknownIdentifier, identifier, 0};
-    }
-
-    // Stacking together only numeric values
-    if (isdigit(lastChar) || lastChar == '.') {
-        std::string numStr;
-
-        do {
-            numStr += lastChar;
-            m_inputStream.get(lastChar);
+            buffer += lastChar;
+            lastChar = getchar();
         } while (isdigit(lastChar) || lastChar == '.');
 
-        return Token{TokenType::_number, "", strtod(numStr.c_str(), 0)};
+        //convert string to number
+        numerical = strtod(buffer.c_str(), 0);
+
+        return tok_number;
     }
 
-    if (lastChar == '#') {
-        do {
-            m_inputStream.get(lastChar);
-        } while (!m_inputStream.eof() && lastChar != '\n' && lastChar != '\r');
+    //comment handling
+    if(lastChar == '#') {
+        do lastChar = getchar();
+        while (lastChar != EOF && lastChar != '\n' && lastChar != '\r'); //i hate windows users
 
-        if (lastChar != EOF) {
-            return getToken();
+        if(lastChar == EOF) {
+            return ::getToken();
         }
     }
 
-    return Token{TokenType::_unknownToken, "" + lastChar, 0};
+    //exceptional handling
+    if(lastChar == EOF) return tok_eof;
+
+    int temp = lastChar;
+    lastChar = getchar(); //eat
+    return temp;
+}
+
+int getNextToken() {
+    return curTok = ::getToken();
 }

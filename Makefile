@@ -1,6 +1,6 @@
 COMPILER := g++
-FLAGS := `llvm-config --cxxflags --ldflags --system-libs --libs core`
-COMPILE := $(COMPILER)
+FLAGS := `llvm-config --cxxflags --ldflags --system-libs --libs all`
+COMPILE := $(COMPILER)\
 
 SRC := ./src
 BIN := ./bin
