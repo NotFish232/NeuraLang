@@ -7,13 +7,12 @@ using namespace llvm;
 
 int main(int argc, char **argv) {
 
-
-    Parser parser("examples/hello_world.nl");
-    parser.parse();
-
     ctx = std::make_unique<LLVMContext>();
     mod = std::make_unique<Module>("JIT", *ctx);
     builder = std::make_unique<IRBuilder<>>(*ctx);
+
+    Parser parser("examples/hello_world.nl");
+    parser.parse();
 
     mod->print(errs(), nullptr);
 

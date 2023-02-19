@@ -1,1 +1,1 @@
-def foo(a b) a*a
+print(1+2)

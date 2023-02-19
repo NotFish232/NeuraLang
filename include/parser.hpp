@@ -20,8 +20,6 @@
 
 namespace nl {
 
-
-
 class Parser {
 private:
     Lexer m_lexer;
