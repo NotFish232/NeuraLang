@@ -1,7 +1,7 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 
-#include <string>
+#include <iostream>
 
 namespace nl {
 
@@ -18,11 +18,16 @@ enum class TokenType {
     _null
 };
 
+std::string repr(const TokenType &t);
+
 struct Token {
     TokenType type;
     std::string identifier;
     double numVal;
 };
+
+std::ostream &operator<<(std::ostream &os, const TokenType &t);
+std::ostream &operator<<(std::ostream &os, const Token &token);
 
 }
 
