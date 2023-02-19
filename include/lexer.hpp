@@ -10,6 +10,7 @@ namespace nl {
 
 class Lexer {
 private:
+    char m_lastChar;
     std::istream *m_inputStream;
     Token m_currentToken;
 

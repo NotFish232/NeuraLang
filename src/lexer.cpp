@@ -5,12 +5,15 @@ using namespace std;
 using namespace nl;
 
 Lexer::Lexer() {
+    m_lastChar = ' ';
     m_inputStream = nullptr;
     m_currentToken = Token{TokenType::_null, "", 0};
 }
 
 Lexer::Lexer(istream &inputStream) {
+    m_lastChar = ' ';
     m_inputStream = &inputStream;
+    m_currentToken = Token{TokenType::_null, "", 0};
 }
 
 void Lexer::setStream(istream &inputStream) {
@@ -26,8 +29,8 @@ Token Lexer::getNextToken() {
 }
 
 Token Lexer::_getNextToken() {
-    char lastChar = ' ';
-
+    char lastChar = m_lastChar;
+    m_lastChar = ' ';
     while (isspace(lastChar) && !m_inputStream->eof()) {
         m_inputStream->get(lastChar);
     }
@@ -43,6 +46,7 @@ Token Lexer::_getNextToken() {
             identifier += lastChar;
             m_inputStream->get(lastChar);
         } while (isalpha(lastChar));
+        m_lastChar = lastChar;
 
         if (identifier == "def") {
             return Token{TokenType::_def, "", 0};
@@ -63,6 +67,7 @@ Token Lexer::_getNextToken() {
             numStr += lastChar;
             m_inputStream->get(lastChar);
         } while (isdigit(lastChar) || lastChar == '.');
+        m_lastChar = lastChar;
 
         return Token{TokenType::_number, "", strtod(numStr.c_str(), 0)};
     }
@@ -84,5 +89,5 @@ Token Lexer::_getNextToken() {
         }
     }
 
-    return Token{TokenType::_unknownToken, "" + lastChar, 0};
+    return Token{TokenType::_unknownToken, string(1, lastChar), 0};
 }
