@@ -38,6 +38,7 @@ private:
     void handleDefinition();
     void handleExtern();
     void handleTopLevelExpression();
+    int getTokenPrecedence() const;
 
 public:
     Parser(const std::string &filename);

@@ -22,7 +22,7 @@ public:
 
     void setStream(std::istream &inputStream);
 
-    Token getCurrentToken();
+    Token getCurrentToken() const;
     Token getNextToken();
 };
 

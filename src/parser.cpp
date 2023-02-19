@@ -49,7 +49,7 @@ unique_ptr<ExprAST> Parser::parsePrimary() {
     case TokenType::_leftParen:
         return parseParenExpr();
     default:
-        logger.error("unknown token: " + currentToken.identifier);
+        cout << "unknown token: " << currentToken.type << '\n';
         return nullptr;
     }
 }
@@ -59,8 +59,9 @@ unique_ptr<ExprAST> Parser::parseParenExpr() {
     // set next token in buffer
     m_lexer.getNextToken();
 
-    auto V = parseExpression();
-    if (!V){
+    auto expression = parseExpression();
+
+    if (!expression){
         return nullptr;
     }
 
@@ -71,7 +72,8 @@ unique_ptr<ExprAST> Parser::parseParenExpr() {
     }
 
     m_lexer.getNextToken(); // eat
-    return V;
+
+    return expression;
 }
 
 // expressions
@@ -116,16 +118,26 @@ unique_ptr<ExprAST> Parser::parseNumberExpr() {
     m_lexer.getNextToken();
     return std::move(Result);
 }
+int Parser::getTokenPrecedence() const {
+    Token curTok = m_lexer.getCurrentToken();
+  if (!isascii(curTok.identifier[0])) {
+    return -1;
+  }
+
+  int TokPrec = binopPrecedence[curTok.identifier[0]];
+  if (TokPrec <= 0) return -1;
+
+  return TokPrec;
+}
 
 // parse binary operations
 unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, unique_ptr<ExprAST> LHS) {
     // sorry again
     while (true) {
-        int tokenPrecedence = binopPrecedence[expressionPrecedence];
+        int tokenPrecedence = getTokenPrecedence();
         if (tokenPrecedence < expressionPrecedence){
             return LHS;
         }
-
 
         Token binaryOperation = m_lexer.getCurrentToken();
         m_lexer.getNextToken(); // eat
@@ -135,12 +147,15 @@ unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, un
             return nullptr;
         }
 
-        int nextPrecedence = binopPrecedence[expressionPrecedence];
+        cout << "RHS WAS FOUND \n";
+
+        int nextPrecedence = getTokenPrecedence();
         if (tokenPrecedence < nextPrecedence) {
             RHS = parseBinaryOperationRHS(++tokenPrecedence, std::move(RHS));
             if (!RHS){
                 return nullptr;
             }
+            cout << "here \n";
         }
 
         // merge the operation from the left hand side and the right hand side
@@ -168,7 +183,7 @@ unique_ptr<PrototypeAST> Parser::parsePrototype() {
     m_lexer.getNextToken(); // eat
 
     // this section is literally the (args, args) part
-    if (m_lexer.getCurrentToken().identifier != "(") {
+    if (m_lexer.getCurrentToken().type != TokenType::_leftParen) {
         logger.error("expected '(' in prototype");
         return nullptr;
     }
@@ -178,7 +193,7 @@ unique_ptr<PrototypeAST> Parser::parsePrototype() {
         argumentNames.push_back(m_lexer.getCurrentToken().identifier);
     }
 
-    if (m_lexer.getCurrentToken().identifier != ")") {
+    if (m_lexer.getCurrentToken().type != TokenType::_rightParen) {
         logger.error("expected ')' in prototype");
         return nullptr;
     }
@@ -204,6 +219,7 @@ unique_ptr<FunctionAST> Parser::parseDefinition() {
 
 unique_ptr<FunctionAST> Parser::parseTopLevelExpr() {
     if (auto expression = parseExpression()) {
+        cout << "here \n";
         auto prototype = make_unique<PrototypeAST>("__anon_expr", vector<string>());
         return make_unique<FunctionAST>(std::move(prototype), std::move(expression));
     }
@@ -219,6 +235,7 @@ std::unique_ptr<PrototypeAST> Parser::parseExtern() {
 void Parser::handleDefinition() {
     if (auto FnAST = parseDefinition()) {
         if (auto *FnIR = FnAST->codegen()) {
+            cout << "here \n";
             fprintf(stderr, "read function definition:");
             FnIR->print(errs());
             fprintf(stderr, "\n");
@@ -231,6 +248,7 @@ void Parser::handleDefinition() {
 void Parser::handleExtern() {
     if (auto ProtoAST = parseExtern()) {
         if (auto *FnIR = ProtoAST->codegen()) {
+            cout << "here \n";
             fprintf(stderr, "read extern:");
             FnIR->print(errs());
             fprintf(stderr, "\n");
@@ -241,8 +259,10 @@ void Parser::handleExtern() {
 }
 
 void Parser::handleTopLevelExpression() {
+    cout << "here \n";
     if (auto FnAST = parseTopLevelExpr()) {
         if (auto *FnIR = FnAST->codegen()) {
+            cout << "here \n";
             fprintf(stderr, "read top-level expression:");
             FnIR->print(errs());
             fprintf(stderr, "\n");

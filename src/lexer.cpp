@@ -20,7 +20,7 @@ void Lexer::setStream(istream &inputStream) {
     m_inputStream = &inputStream;
 }
 
-Token Lexer::getCurrentToken() {
+Token Lexer::getCurrentToken() const {
     return m_currentToken;
 }
 
