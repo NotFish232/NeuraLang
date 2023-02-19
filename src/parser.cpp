@@ -13,7 +13,8 @@ std::map<char, int> binopPrecedence = {
     {'<', 10},
     {'+', 20},
     {'-', 20},
-    {'*', 40}};
+    {'*', 40}
+};
 
 Parser::Parser(const string &filename) {
     m_fileHandler = ifstream(filename, ios::in);
@@ -47,7 +48,7 @@ unique_ptr<ExprAST> Parser::parsePrimary() {
     case TokenType::_leftParen:
         return parseParenExpr();
     default:
-        logger.error("unknown token");
+        logger.error("unknown token: " + currentToken.identifier);
         return nullptr;
     }
 }
@@ -117,25 +118,29 @@ unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, un
     // sorry again
     while (true) {
         int tokenPrecedence = binopPrecedence[expressionPrecedence];
-        if (tokenPrecedence < expressionPrecedence)
+        if (tokenPrecedence < expressionPrecedence){
             return LHS;
+        }
+
 
         Token binaryOperation = m_lexer.getCurrentToken();
         m_lexer.getNextToken(); // eat
 
         auto RHS = parsePrimary();
-        if (!RHS)
+        if (!RHS){
             return nullptr;
+        }
 
         int nextPrecedence = binopPrecedence[expressionPrecedence];
         if (tokenPrecedence < nextPrecedence) {
             RHS = parseBinaryOperationRHS(++tokenPrecedence, std::move(RHS));
-            if (!RHS)
+            if (!RHS){
                 return nullptr;
+            }
         }
 
         // merge the operation from the left hand side and the right hand side
-        LHS = make_unique<BinaryExprAST>(binaryOperation, std::move(LHS), std::move(RHS));
+        LHS = std::make_unique<BinaryExprAST>(binaryOperation.identifier[0], std::move(LHS), std::move(RHS));
     }
 }
 
@@ -206,4 +211,40 @@ unique_ptr<FunctionAST> Parser::parseTopLevelExpr() {
 std::unique_ptr<PrototypeAST> Parser::parseExtern() {
     m_lexer.getNextToken();
     return parsePrototype();
+}
+
+void Parser::handleDefinition() {
+    if (auto FnAST = parseDefinition()) {
+        if (auto *FnIR = FnAST->codegen()) {
+            fprintf(stderr, "read function definition:");
+            FnIR->print(errs());
+            fprintf(stderr, "\n");
+        }
+    } else {
+        m_lexer.getNextToken();
+    }
+}
+
+void Parser::handleExtern() {
+    if (auto ProtoAST = parseExtern()) {
+        if (auto *FnIR = ProtoAST->codegen()) {
+            fprintf(stderr, "read extern:");
+            FnIR->print(errs());
+            fprintf(stderr, "\n");
+        }
+    } else {
+        m_lexer.getNextToken();
+    }
+}
+
+void Parser::handleTopLevelExpression() {
+    if (auto FnAST = parseTopLevelExpr()) {
+        if (auto *FnIR = FnAST->codegen()) {
+            fprintf(stderr, "read top-level expression:");
+            FnIR->print(errs());
+            fprintf(stderr, "\n");
+        }
+    } else {
+        m_lexer.getNextToken();
+    }
 }

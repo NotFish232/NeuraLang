@@ -20,12 +20,13 @@
 
 namespace nl {
 
-extern std::map<char, int> binopPrecedence;
+
 
 class Parser {
 private:
     Lexer m_lexer;
     std::ifstream m_fileHandler;
+    std::map<char, int> m_binopPrecedence;
     std::unique_ptr<ExprAST> parseNumberExpr();
     std::unique_ptr<ExprAST> parseParenExpr();
     std::unique_ptr<ExprAST> parseIdentifierExpr();
@@ -36,7 +37,9 @@ private:
     std::unique_ptr<FunctionAST> parseDefinition();
     std::unique_ptr<FunctionAST> parseTopLevelExpr();
     std::unique_ptr<PrototypeAST> parseExtern();
-    
+    void handleDefinition();
+    void handleExtern();
+    void handleTopLevelExpression();
 
 public:
     Parser(const std::string &filename);
