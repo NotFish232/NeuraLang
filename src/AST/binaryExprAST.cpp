@@ -17,14 +17,14 @@ Value *BinaryExprAST::codegen() {
 
     switch (m_operator) {
         case '+':
-            return builder.CreateFAdd(L, R, "addtmp");
+            return builder->CreateFAdd(L, R, "addtmp");
         case '-':
-            return builder.CreateFSub(L, R, "subtmp");
+            return builder->CreateFSub(L, R, "subtmp");
         case '*':
-            return builder.CreateFMul(L, R, "multmp");
+            return builder->CreateFMul(L, R, "multmp");
         case '<':
-            L = builder.CreateFCmpULT(L, R, "cmptmp");
-            return builder.CreateUIToFP(L, Type::getDoubleTy(ctx), "booltmp");
+            L = builder->CreateFCmpULT(L, R, "cmptmp");
+            return builder->CreateUIToFP(L, Type::getDoubleTy(*ctx), "booltmp");
         default:
             Logger::error("Invalid binary operator");
             return nullptr;

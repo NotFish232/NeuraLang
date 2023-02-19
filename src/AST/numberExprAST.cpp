@@ -10,5 +10,5 @@ using namespace llvm;
 NumberExprAST::NumberExprAST(double val): m_val(val) {}
 
 Value *NumberExprAST::codegen() {
-    return ConstantFP::get(ctx, APFloat(m_val));
+    return ConstantFP::get(*ctx, APFloat(m_val));
 }

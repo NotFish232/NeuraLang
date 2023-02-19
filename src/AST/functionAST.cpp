@@ -18,8 +18,8 @@ Function *FunctionAST::codegen() {
     if (!function)
         return nullptr;
 
-    BasicBlock *block = BasicBlock::Create(ctx, "entry", function);
-    builder.SetInsertPoint(block);
+    BasicBlock *block = BasicBlock::Create(*ctx, "entry", function);
+    builder->SetInsertPoint(block);
     values.clear();
 
     for (auto &Arg : function->args()) {
@@ -27,7 +27,7 @@ Function *FunctionAST::codegen() {
     }
 
     if (Value *returnedValue = m_body->codegen()) {
-        builder.CreateRet(returnedValue);
+        builder->CreateRet(returnedValue);
         verifyFunction(*function);
 
         return function;
