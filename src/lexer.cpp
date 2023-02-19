@@ -73,10 +73,10 @@ Token Lexer::_getNextToken() {
     }
 
     if (lastChar == '(') {
-        return Token{TokenType::_leftParen, "", 0};
+        return Token{TokenType::_leftParen, "(g", 0};
     }
     if (lastChar == ')') {
-        return Token{TokenType::_rightParen, "", 0};
+        return Token{TokenType::_rightParen, ")", 0};
     }
 
     if (lastChar == '#') {
