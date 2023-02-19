@@ -1,5 +1,5 @@
-#include <iostream>
 #include "include/parser.hpp"
+#include <iostream>
 
 using namespace std;
 using namespace nl;
