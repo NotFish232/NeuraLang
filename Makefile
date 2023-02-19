@@ -2,14 +2,34 @@ COMPILER := g++
 FLAGS := `llvm-config --cxxflags --ldflags --system-libs --libs core`
 COMPILE := $(COMPILER)
 
+
+TEMP := ./temp
+
 SRC := ./src
 BIN := ./bin
 
-SOURCE_FILES := $(shell find src -name "*.cpp")
+STD := ./std
+IR := ./IR
+
+STD_FILES := $(shell find $(STD) -name "*.cpp")
+STD_DEP_FILES := $(patsubst %.cpp, $(TEMP)/%.ll, $(notdir $(STD_FILES)))
+
+
+SOURCE_FILES := $(shell find $(SRC) -name "*.cpp")
 DEP_FILES := $(patsubst %.cpp, $(BIN)/%.o, $(notdir $(SOURCE_FILES)))
 
 
-all: build run;
+all: std build run;
+
+
+std: $(TEMP) $(STD_DEP_FILES)
+	llvm-link $(STD_DEP_FILES) -S -o $(IR)/out.ll
+	rm -r $(TEMP)
+	
+
+$(TEMP)/%.ll: $(STD)/%.cpp
+	clang++ -stdlib=libc++ -S -emit-llvm $^ -o $@
+
 
 
 build: $(BIN)/main.out $(BIN)/tests.out;
@@ -32,18 +52,25 @@ tests: $(BIN)/tests.out
 
 
 
-$(BIN)/%.o: src/%.cpp
+$(BIN)/%.o: $(SRC)/%.cpp
 	$(COMPILE) -c $^ -o $@
 
-$(BIN)/%.o: src/*/%.cpp
+$(BIN)/%.o: $(SRC)/*/%.cpp
 	$(COMPILE) -c $^ -o $@
 
 
 $(BIN):
 	mkdir $(BIN)
 
+$(IR):
+	mkdir $(IR)
+
+$(TEMP):
+	mkdir $(TEMP)
+
+
 
 clean: 
 	rm -rf ./bin/*
 
-.PHONY: all build run clean tests;
+.PHONY: all build run clean tests std;
