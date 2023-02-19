@@ -43,11 +43,11 @@ tests: $(BIN)/tests.out
 	$(BIN)/tests.out
 
 
-./bin/main.out:  $(BIN) $(DEP_FILES) main.cpp
+$(BIN)/main.out:  $(BIN) $(DEP_FILES) main.cpp
 	$(COMPILE) main.cpp $(BIN)/*.o  -o $(BIN)/main.out $(FLAGS)
 
 
-./bin/tests.out: $(BIN) $(DEP_FILES) tests.cpp
+$(BIN)/tests.out: $(BIN) $(DEP_FILES) tests.cpp
 	$(COMPILE) tests.cpp $(BIN)/*.o -o $(BIN)/tests.out $(FLAGS)
 
 

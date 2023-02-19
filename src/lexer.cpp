@@ -45,7 +45,7 @@ Token Lexer::_getNextToken() {
         do {
             identifier += lastChar;
             m_inputStream->get(lastChar);
-        } while (isalpha(lastChar));
+        } while (isalpha(lastChar) && !m_inputStream->eof());
         m_lastChar = lastChar;
 
         if (identifier == "def") {
@@ -66,14 +66,14 @@ Token Lexer::_getNextToken() {
         do {
             numStr += lastChar;
             m_inputStream->get(lastChar);
-        } while (isdigit(lastChar) || lastChar == '.');
+        } while ((isdigit(lastChar) || lastChar == '.') && !m_inputStream->eof());
         m_lastChar = lastChar;
 
         return Token{TokenType::_number, "", strtod(numStr.c_str(), 0)};
     }
 
     if (lastChar == '(') {
-        return Token{TokenType::_leftParen, "(g", 0};
+        return Token{TokenType::_leftParen, "(", 0};
     }
     if (lastChar == ')') {
         return Token{TokenType::_rightParen, ")", 0};
