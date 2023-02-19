@@ -9,7 +9,7 @@
 #include <llvm/IR/BasicBlock.h>
 
 #include "../../include/NeuralLang.hpp"
-#include "../Logger.hpp"
+#include "../Logger/Logger.hpp"
 
 // base class for all
 class ExprAST {

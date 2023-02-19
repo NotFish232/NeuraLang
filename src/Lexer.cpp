@@ -1,4 +1,4 @@
-#include "../include/lexer.hpp"
+#include "../include/Lexer.hpp"
 
 using namespace std;
 using namespace nl;

@@ -2,7 +2,7 @@
 // Created by piuslee on 2/18/23.
 //
 
-#include "../../include/Logger.hpp"
+#include "../../include/Logger/Logger.hpp"
 
 std::unique_ptr<ExprAST> LogError(const char *Str) {
     fprintf(stderr, "LogError: %s\n", Str);

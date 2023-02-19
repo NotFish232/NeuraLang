@@ -5,8 +5,8 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
-#include "AST/ExprAST.hpp"
-#include "AST/PrototypeAST.hpp"
+#include "../AST/ExprAST.hpp"
+#include "../AST/PrototypeAST.hpp"
 
 std::unique_ptr<ExprAST> LogError(const char *Str);
 std::unique_ptr<PrototypeAST> LogErrorP(const char *Str);
