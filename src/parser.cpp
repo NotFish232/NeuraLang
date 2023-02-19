@@ -25,13 +25,13 @@ void Parser::parse() {
     while (m_lexer.getCurrentToken().type != TokenType::_eof) {
         switch (m_lexer.getCurrentToken().type) {
         case TokenType::_def:
-            parseDefinition();
+            handleDefinition();
             break;
         case TokenType::_extern:
-            parseExtern();
+            handleExtern();
             break;
         default:
-            parseTopLevelExpr();
+            handleTopLevelExpression();
             break;
         }
     }
