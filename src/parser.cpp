@@ -49,7 +49,7 @@ unique_ptr<ExprAST> Parser::parsePrimary() {
     case TokenType::_leftParen:
         return parseParenExpr();
     default:
-        cout << "unknown token: " << currentToken.type << '\n';
+        cerr << "LogError: unknown token: " << currentToken.type << '\n';
         return nullptr;
     }
 }
@@ -147,15 +147,12 @@ unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, un
             return nullptr;
         }
 
-        cout << "RHS WAS FOUND \n";
-
         int nextPrecedence = getTokenPrecedence();
         if (tokenPrecedence < nextPrecedence) {
             RHS = parseBinaryOperationRHS(++tokenPrecedence, std::move(RHS));
             if (!RHS){
                 return nullptr;
             }
-            cout << "here \n";
         }
 
         // merge the operation from the left hand side and the right hand side
@@ -173,14 +170,20 @@ unique_ptr<ExprAST> Parser::parseExpression() {
 
 // parse the function sig
 unique_ptr<PrototypeAST> Parser::parsePrototype() {
+    logger.note("Reached prototype.");
+
     // this section grabs the function name
     if (m_lexer.getCurrentToken().type != TokenType::_identifier) {
         logger.error("expected function name in prototype");
         return nullptr;
     }
 
+    logger.note("Valid function name.");
+
     string functionName = m_lexer.getCurrentToken().identifier;
     m_lexer.getNextToken(); // eat
+
+    logger.note("Ate function name.");
 
     // this section is literally the (args, args) part
     if (m_lexer.getCurrentToken().type != TokenType::_leftParen) {
@@ -188,8 +191,11 @@ unique_ptr<PrototypeAST> Parser::parsePrototype() {
         return nullptr;
     }
 
+    logger.note("Valid arg begin.");
+
     std::vector<std::string> argumentNames;
-    while (m_lexer.getNextToken().type != TokenType::_identifier) {
+    while (m_lexer.getNextToken().type == TokenType::_identifier) {
+        cerr << "LOGGED TOKEN: " << m_lexer.getCurrentToken().type << '\n';
         argumentNames.push_back(m_lexer.getCurrentToken().identifier);
     }
 
@@ -207,8 +213,8 @@ unique_ptr<FunctionAST> Parser::parseDefinition() {
     m_lexer.getNextToken();
 
     auto prototype = parsePrototype();
-    if (!prototype)
-        return nullptr; // check if the prototype is valid
+    if (!prototype) return nullptr; // check if the prototype is valid
+    logger.note("Valid Prototype.");
 
     if (auto expression = parseExpression()) {
         return make_unique<FunctionAST>(std::move(prototype), std::move(expression));
@@ -219,7 +225,6 @@ unique_ptr<FunctionAST> Parser::parseDefinition() {
 
 unique_ptr<FunctionAST> Parser::parseTopLevelExpr() {
     if (auto expression = parseExpression()) {
-        cout << "here \n";
         auto prototype = make_unique<PrototypeAST>("__anon_expr", vector<string>());
         return make_unique<FunctionAST>(std::move(prototype), std::move(expression));
     }
@@ -233,9 +238,9 @@ std::unique_ptr<PrototypeAST> Parser::parseExtern() {
 }
 
 void Parser::handleDefinition() {
+    logger.note("Reached definition.");
     if (auto FnAST = parseDefinition()) {
         if (auto *FnIR = FnAST->codegen()) {
-            cout << "here \n";
             fprintf(stderr, "read function definition:");
             FnIR->print(errs());
             fprintf(stderr, "\n");
@@ -248,7 +253,6 @@ void Parser::handleDefinition() {
 void Parser::handleExtern() {
     if (auto ProtoAST = parseExtern()) {
         if (auto *FnIR = ProtoAST->codegen()) {
-            cout << "here \n";
             fprintf(stderr, "read extern:");
             FnIR->print(errs());
             fprintf(stderr, "\n");
@@ -259,10 +263,8 @@ void Parser::handleExtern() {
 }
 
 void Parser::handleTopLevelExpression() {
-    cout << "here \n";
     if (auto FnAST = parseTopLevelExpr()) {
         if (auto *FnIR = FnAST->codegen()) {
-            cout << "here \n";
             fprintf(stderr, "read top-level expression:");
             FnIR->print(errs());
             fprintf(stderr, "\n");

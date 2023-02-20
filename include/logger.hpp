@@ -12,6 +12,7 @@
 class Logger {
 public:
     static void error(const std::string &str);
+    static void note(const std::string &str);
 };
 
 #endif

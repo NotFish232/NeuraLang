@@ -11,3 +11,9 @@ void Logger::error(const string &str) {
     cerr << "LogError: " << str << '\n';
 #endif
 }
+
+void Logger::note(const string &str) {
+#ifdef DEBUG
+    cout << "NOTE: " << str << '\n';
+#endif
+}
