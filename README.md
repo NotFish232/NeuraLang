@@ -14,6 +14,8 @@ Modern day machine learning is all done on python, making not very extendable - 
 ![demo2](./readme/demo2.png)
 Interopability is achived because of LLVM's IR - or intermediate representation.  By using an LLVM-compatible compiler, such as `clang`, `llvm-rs`, or any other LLVM bindings for that specific language interopability is easy.  The target language's code will be compiled to the IR.  For example the code shown above depicts C-code that has been compiled down to its intermediate representation.  This is then combined with the code compiled in _Neuralang_ to be called from either language!  The standard library for this language was written in C and interop-ed with _Neuralang_ as a proof on concept.
 
+## Compiler Structure
+The compiler is split into three parts: the frontend, which contains the AST and Lexer, the middle-end which contains the "passes", which are essentially just optimizations, and the backend, which converts the code into LLVM-IR.  The frontend defines how _Neuralang_ defines it's syntax.  It sets rules in abstractions called ASTs, or abstract syntax trees.
 
 ## Challenges we ran into
 
@@ -29,4 +31,4 @@ We learned how to build our own language interperter that can compile code down 
 
 ## What's next for NeuraLang
 
-Moving forward, we plan to add a lot more functionality. These include quality of live improvements, and new features, like GPU integration, and more predefined classes. Also, hopefully more new features and built-ins to help users.
+Moving forward, we plan to add a lot more functionality. These include quality of life improvements, and new features, like GPU integration, and more predefined classes. Also, hopefully more new features and built-ins to help users.
