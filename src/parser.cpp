@@ -114,7 +114,7 @@ unique_ptr<ExprAST> Parser::parseIdentifierExpr() {
 
 // parse number
 unique_ptr<ExprAST> Parser::parseNumberExpr() {
-    auto Result = make_unique<NumberExprAST>(m_lexer.getCurrentToken().numVal);
+    auto Result = make_unique<NumericExprAST>(m_lexer.getCurrentToken().numVal);
     m_lexer.getNextToken();
     return std::move(Result);
 }

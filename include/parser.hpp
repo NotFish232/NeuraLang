@@ -11,7 +11,7 @@
 #include "AST/callExprAST.hpp"
 #include "AST/exprAST.hpp"
 #include "AST/functionAST.hpp"
-#include "AST/numberExprAST.hpp"
+#include "AST/numericExprAST.hpp"
 #include "AST/prototypeAST.hpp"
 #include "AST/variableExprAST.hpp"
 
