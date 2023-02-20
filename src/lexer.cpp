@@ -39,6 +39,16 @@ Token Lexer::_getNextToken() {
         return Token{TokenType::_eof, "", 0};
     }
 
+    if (lastChar == '"') {
+        string str = "";
+        m_inputStream->get(lastChar);
+        do {
+            str += lastChar;
+            m_inputStream->get(lastChar);
+        } while (lastChar != '"' && !m_inputStream->eof());
+        return Token{TokenType::_string, str, 0};
+    }
+
     if (isalpha(lastChar)) {
         string identifier = "";
 

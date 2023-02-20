@@ -16,6 +16,8 @@ string repr(const TokenType &t) {
         return "identifier";
     case TokenType::_number:
         return "number";
+    case TokenType::_string:
+        return "string";
     case TokenType::_unknownIdentifier:
         return "unknownIdentifier";
     case TokenType::_unknownToken:

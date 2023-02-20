@@ -11,6 +11,7 @@ enum class TokenType {
     _extern,
     _identifier,
     _number,
+    _string,
     _unknownIdentifier,
     _unknownToken,
     _leftParen,

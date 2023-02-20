@@ -46,6 +46,8 @@ unique_ptr<ExprAST> Parser::parsePrimary() {
         return parseIdentifierExpr();
     case TokenType::_number:
         return parseNumberExpr();
+    case TokenType::_string:
+        return parseStringExpr();
     case TokenType::_leftParen:
         return parseParenExpr();
     case TokenType::_if:
@@ -120,6 +122,13 @@ unique_ptr<ExprAST> Parser::parseNumberExpr() {
     m_lexer.getNextToken();
     return std::move(Result);
 }
+
+unique_ptr<ExprAST> Parser::parseStringExpr() {
+    auto result = make_unique<StringExprAST>(m_lexer.getCurrentToken().identifier);
+    m_lexer.getNextToken();
+    return std::move(result);
+}
+
 int Parser::getTokenPrecedence() const {
     Token curTok = m_lexer.getCurrentToken();
   if (!isascii(curTok.identifier[0])) {
@@ -296,7 +305,7 @@ void Parser::handleExtern() {
     if (auto ProtoAST = parseExtern()) {
         if (auto *FnIR = ProtoAST->codegen()) {
             fprintf(stderr, "read extern:");
-            FnIR->print(errs());
+            // FnIR->print(errs());
             fprintf(stderr, "\n");
         }
     } else {
