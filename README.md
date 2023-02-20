@@ -1,5 +1,5 @@
 # Neuralang: A Compiled Interoperable Scripting Language Built for Machine Learning
-
+![demo3](./readme/demo3.png)
 ![demo1](./readme/demo1.png)
 
 _Neuralang_ is a compiled language with support for interoperability with any LLVM language (i.e. C, C++, Haskell, Rust, etc.) with a focus on machine learning.  _Neuralang_ ships with several features:
