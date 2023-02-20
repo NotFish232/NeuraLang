@@ -10,3 +10,7 @@ _neuralang_ is a compiled language with support for interoperability with any LL
 ## Inspiration
 Modern day machine learning is all done on python, making not very extendable - good luck trying to have Rust and Python communicate with each other without having two separate processes running.  _neuralang_ seeks to solve this by making a scripting language built in LLVM (low level virtual machine) - allowing anybody with knowledge in most modern languages to have access to machine learning embedded in _your_ program without the need for creating multiple programs to have concurrent machine learning.
 
+## Interopability
+![demo2](./readme/demo2.png)
+Interopability is achived because of LLVM's IR - or intermediate representation.  By using an LLVM-compatible compiler, such as `clang`, `llvm-rs`, or any other LLVM bindings for that specific language interopability is easy.  The target language's code will be compiled to the IR.  For example the code shown above depicts C-code that has been compiled down to its intermediate representation.  This is then combined with the code compiled in _neuralang_ to be called from either language!  The standard library for this language was written in C and interop-ed with _neuralang_ as a proof on concept.
+
