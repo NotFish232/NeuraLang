@@ -1,7 +1,3 @@
-//
-// Created by piuslee on 2/18/23.
-//
-
 #ifndef BINARYEXPRAST_HPP
 #define BINARYEXPRAST_HPP
 

@@ -56,6 +56,18 @@ Token Lexer::_getNextToken() {
             return Token{TokenType::_extern, "", 0};
         }
 
+        if(identifier == "if") {
+            return Token{TokenType::_if, "", 0};
+        }
+
+        if(identifier == "then") {
+            return Token{TokenType::_then, "", 0};
+        }
+
+        if(identifier == "else") {
+            return Token{TokenType::_else, "", 0};
+        }
+
         return Token{TokenType::_identifier, identifier, 0};
     }
 

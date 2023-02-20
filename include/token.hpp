@@ -15,7 +15,12 @@ enum class TokenType {
     _unknownToken,
     _leftParen,
     _rightParen,
-    _null
+    _null,
+
+    //add control flow
+    _if,
+    _then,
+    _else
 };
 
 std::string repr(const TokenType &t);

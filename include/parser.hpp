@@ -14,6 +14,7 @@
 #include "AST/numericExprAST.hpp"
 #include "AST/prototypeAST.hpp"
 #include "AST/variableExprAST.hpp"
+#include "AST/ifExprAST.hpp"
 
 #include "lexer.hpp"
 #include "token.hpp"
@@ -35,6 +36,7 @@ private:
     std::unique_ptr<FunctionAST> parseDefinition();
     std::unique_ptr<FunctionAST> parseTopLevelExpr();
     std::unique_ptr<PrototypeAST> parseExtern();
+    std::unique_ptr<IfExprAST> parseIfExpr();
     void handleDefinition();
     void handleExtern();
     void handleTopLevelExpression();

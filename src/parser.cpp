@@ -48,6 +48,8 @@ unique_ptr<ExprAST> Parser::parsePrimary() {
         return parseNumberExpr();
     case TokenType::_leftParen:
         return parseParenExpr();
+    case TokenType::_if:
+        return parseIfExpr();
     default:
         cerr << "LogError: unknown token: " << currentToken.type << '\n';
         return nullptr;
@@ -195,7 +197,7 @@ unique_ptr<PrototypeAST> Parser::parsePrototype() {
 
     std::vector<std::string> argumentNames;
     while (m_lexer.getNextToken().type == TokenType::_identifier) {
-        cerr << "LOGGED TOKEN: " << m_lexer.getCurrentToken().type << '\n';
+        cout << "LOGGED TOKEN: " << m_lexer.getCurrentToken().type << '\n';
         argumentNames.push_back(m_lexer.getCurrentToken().identifier);
     }
 
@@ -235,6 +237,46 @@ unique_ptr<FunctionAST> Parser::parseTopLevelExpr() {
 std::unique_ptr<PrototypeAST> Parser::parseExtern() {
     m_lexer.getNextToken();
     return parsePrototype();
+}
+
+std::unique_ptr<IfExprAST> Parser::parseIfExpr(){
+    //eat the if statement
+    m_lexer.getNextToken();
+
+    //condition
+    auto condition = parseExpression();
+    if(!condition) {
+        logger.error("invalid (if) condition");
+        return nullptr;
+    }
+    logger.note("reached/passed if");
+
+    if(m_lexer.getCurrentToken().type != TokenType::_then) {
+        logger.error("expected then statement");
+        return nullptr;
+    }
+    m_lexer.getNextToken();
+
+    auto then = parseExpression();
+    if(!condition) {
+        logger.error("invalid then condition");
+        return nullptr;
+    }
+    logger.note("reached/passed then");
+
+    if(m_lexer.getCurrentToken().type != TokenType::_else) {
+        logger.error("expected else statement");
+        return nullptr;
+    }
+    m_lexer.getNextToken(); //eat the else
+
+    auto _else = parseExpression();
+    if(!_else) {
+        logger.error("invalid else condition");
+        return nullptr;
+    }
+
+    return std::make_unique<IfExprAST>(std::move(condition), std::move(then), std::move(_else));
 }
 
 void Parser::handleDefinition() {
