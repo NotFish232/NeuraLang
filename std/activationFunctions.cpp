@@ -28,16 +28,7 @@ float meanSquaredError(const std::vector<float> &output, const std::vector<float
     return loss;
 }
 
-float meanSquaredError(const std::vector<float> &output, const std::vector<float> &actual) {
-    assert(output.size() == actual.size());
-    float loss = 0;
-    for (size_t i = 0; i < output.size(); ++i) {
-        loss += output[i] - actual[i];
-    }
-    loss *= (-2 / output.size());
 
-    return loss;
-}
 
 std::vector<float> softMax(const std::vector<float> &input) {
     std::vector<float> v;

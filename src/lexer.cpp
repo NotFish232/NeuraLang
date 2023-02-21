@@ -4,112 +4,130 @@
 using namespace std;
 using namespace nl;
 
+const set<string> Lexer::keywords = {"def", "for", "while", "if", "else", "break", "continue"};
+// clang-format off
+const set<string> Lexer::valid_symbols = {
+    "=", "+", "+=", "-", "-=", "*", "*=", "/", "/=",
+    "==", "!", "!=", ">", "<", ">=", "<=",
+    ";", ",", ".", "\"", "'", "->",
+    "(", ")", "[", "]", "{", "}"
+};
+// clang-format on
+
 Lexer::Lexer() {
-    m_lastChar = ' ';
+    m_tokenIndex = 0;
     m_inputStream = nullptr;
-    m_currentToken = Token{TokenType::_null, "", 0};
+}
+
+Lexer::Lexer(const string &filename) {
+    m_tokenIndex = 0;
+    m_inputStream = new ifstream(filename, ios::in);
 }
 
 Lexer::Lexer(istream &inputStream) {
-    m_lastChar = ' ';
-    m_inputStream = &inputStream;
-    m_currentToken = Token{TokenType::_null, "", 0};
-}
-
-void Lexer::setStream(istream &inputStream) {
+    m_tokenIndex = 0;
     m_inputStream = &inputStream;
 }
 
-Token Lexer::getCurrentToken() const {
-    return m_currentToken;
+Lexer::~Lexer() {
 }
 
-Token Lexer::getNextToken() {
-    return m_currentToken = _getNextToken();
+void Lexer::set_stream(istream &inputStream) {
+    m_inputStream = &inputStream;
 }
 
-Token Lexer::_getNextToken() {
-    char lastChar = m_lastChar;
-    m_lastChar = ' ';
-    while (isspace(lastChar) && !m_inputStream->eof()) {
-        m_inputStream->get(lastChar);
+bool Lexer::has_next() const {
+    return m_tokens.size() != 0 && m_tokenIndex < m_tokens.size();
+}
+
+const Token &Lexer::get_curr_token() const {
+    return m_tokens[m_tokenIndex];
+}
+
+const Token &Lexer::get_next_token() {
+    return has_next() ? m_tokens[m_tokenIndex++] : Token::null;
+}
+
+void Lexer::parse_tokens() {
+    if (m_inputStream == nullptr) {
+        throw new runtime_error("Lexer's input stream must be set before parsing tokens.");
     }
 
-    if (m_inputStream->eof()) {
-        return Token{TokenType::_eof, "", 0};
+    if (!m_inputStream->good()) {
+        throw new runtime_error("Bad input stream");
     }
 
-    if (lastChar == '"') {
-        string str = "";
-        m_inputStream->get(lastChar);
-        do {
-            str += lastChar;
-            m_inputStream->get(lastChar);
-        } while (lastChar != '"' && !m_inputStream->eof());
-        return Token{TokenType::_string, str, 0};
-    }
+    size_t line_num = 1;
+    for (string line; getline(*m_inputStream, line); ++line_num) {
+        line += '\n'; // force code to parse token at end of line
 
-    if (isalpha(lastChar)) {
-        string identifier = "";
+        TokenType type = TokenType::null;
+        string val = "";
 
-        do {
-            identifier += lastChar;
-            m_inputStream->get(lastChar);
-        } while (isalpha(lastChar) && !m_inputStream->eof());
-        m_lastChar = lastChar;
+        // whether or not line has started - necessary to ignore comments
+        bool has_line_started = false;
 
-        if (identifier == "def") {
-            return Token{TokenType::_def, "", 0};
+        for (size_t i = 0; i < line.length(); ++i) {
+            cout << val << '\n';
+            // ignore comments
+            if (!has_line_started && line[i] == '#') {
+                break;
+            }
+
+            if (type == TokenType::null) {
+                // ignore spaces
+                if (isspace(line[i])) {
+                    continue;
+                }
+
+                has_line_started = true;
+
+                if (line[i] == '"') {
+                    type = TokenType::string;
+                    continue; // don't add quote to string
+                } else if (isalpha(line[i])) {
+                    type = TokenType::identifier;
+                } else if (isdigit(line[i])) {
+                    type = TokenType::number;
+                } else {
+                    type = TokenType::symbol;
+                }
+
+                val += line[i];
+            } else {
+                // clang-format off
+                if (
+                    (isspace(line[i]) && type != TokenType::string) ||
+                    (type == TokenType::string && line[i] == '"') ||
+                    (type == TokenType::identifier && !isalpha(line[i])) ||
+                    (type == TokenType::number && !isdigit(line[i])) ||
+                    (type == TokenType::symbol && valid_symbols.find(val + line[i]) == valid_symbols.end())
+                    ) { // clang-format on
+                    /*
+                    3 possible conditions that the identifier / number / symbol has ended
+                        1. followed by a space, and is not a string
+                        2. another quote meaning string has ended
+                        3. number is followed by NaN, doubles will be implemented later by AST
+                        4. adding the next character makes it not a valid symbol
+                    */
+
+                    if (type == TokenType::identifier && keywords.find(val) != keywords.end()) {
+                        type = TokenType::keyword;
+                    }
+
+                    m_tokens.push_back({type, val, line_num});
+
+                    if (type != TokenType::string) {
+                        // do not reprocess char if it is a string, i.e discard the quote
+                        --i;
+                    }
+                    type = TokenType::null;
+                    val.clear();
+                    
+                } else {
+                    val += line[i];
+                }
+            }
         }
-
-        if (identifier == "extern") {
-            return Token{TokenType::_extern, "", 0};
-        }
-
-        if(identifier == "if") {
-            return Token{TokenType::_if, "", 0};
-        }
-
-        if(identifier == "then") {
-            return Token{TokenType::_then, "", 0};
-        }
-
-        if(identifier == "else") {
-            return Token{TokenType::_else, "", 0};
-        }
-
-        return Token{TokenType::_identifier, identifier, 0};
     }
-
-    // Stacking together only numeric values
-    if (isdigit(lastChar) || lastChar == '.') {
-        std::string numStr;
-
-        do {
-            numStr += lastChar;
-            m_inputStream->get(lastChar);
-        } while ((isdigit(lastChar) || lastChar == '.') && !m_inputStream->eof());
-        m_lastChar = lastChar;
-
-        return Token{TokenType::_number, "", strtod(numStr.c_str(), 0)};
-    }
-
-    if (lastChar == '(') {
-        return Token{TokenType::_leftParen, "(", 0};
-    }
-    if (lastChar == ')') {
-        return Token{TokenType::_rightParen, ")", 0};
-    }
-
-    if (lastChar == '#') {
-        do {
-            m_inputStream->get(lastChar);
-        } while (!m_inputStream->eof() && lastChar != '\n' && lastChar != '\r');
-
-        if (lastChar != EOF) {
-            return _getNextToken();
-        }
-    }
-
-    return Token{TokenType::_unknownToken, string(1, lastChar), 0};
 }

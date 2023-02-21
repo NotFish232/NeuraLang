@@ -1,7 +1,3 @@
-//
-// Created by piuslee on 2/18/23.
-//
-
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
@@ -24,9 +20,10 @@ namespace nl {
 
 class Parser {
 private:
+    const static std::map<std::string, int> binary_operator_precedence;
+
     Lexer m_lexer;
-    std::ifstream m_fileHandler;
-    std::map<char, int> m_binopPrecedence;
+
     std::unique_ptr<ExprAST> parseNumberExpr();
     std::unique_ptr<ExprAST> parseStringExpr();
     std::unique_ptr<ExprAST> parseParenExpr();
@@ -39,6 +36,7 @@ private:
     std::unique_ptr<FunctionAST> parseTopLevelExpr();
     std::unique_ptr<PrototypeAST> parseExtern();
     std::unique_ptr<IfExprAST> parseIfExpr();
+
     void handleDefinition();
     void handleExtern();
     void handleTopLevelExpression();
@@ -46,6 +44,7 @@ private:
 
 public:
     Parser(const std::string &filename);
+    ~Parser();
     void parse();
 };
 

@@ -1,7 +1,3 @@
-//
-// Created by piuslee on 2/18/23.
-//
-
 #ifndef NEURALANG_HPP
 #define NEURALANG_HPP
 
@@ -19,15 +15,13 @@
 #include <llvm/IR/Verifier.h>
 #include <map>
 
-#include "logger.hpp"
-
-using namespace llvm;
+namespace nl {
 
 // This is an object that owns LLVM core data structures
-extern std::unique_ptr<LLVMContext> ctx;
+extern std::unique_ptr<llvm::LLVMContext> ctx;
 
 // This is a helper object that makes easy to generate LLVM instructions
-extern std::unique_ptr<IRBuilder<>> builder;
+extern std::unique_ptr<llvm::IRBuilder<>> builder;
 
 // This is an LLVM construct that contains functions and global variables
 extern std::unique_ptr<llvm::Module> mod;
@@ -35,7 +29,6 @@ extern std::unique_ptr<llvm::Module> mod;
 // This map keeps track of which values are defined in the current scope
 extern std::map<std::string, llvm::Value *> values;
 
-// This is the global logger.
-extern Logger logger;
+}
 
 #endif

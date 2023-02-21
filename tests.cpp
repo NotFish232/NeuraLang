@@ -16,11 +16,11 @@ using namespace std;
 
 int main(int argc, char **argv){
     using namespace nl;
-    ifstream f("examples/hello_world.nl", ios::in);
+    ifstream f("examples/functions.nl", ios::in);
     Lexer lexer(f);
-    int i = 20;
-    while (i--) {
-        cout << lexer.getNextToken();
+    lexer.parse_tokens();
+    while (lexer.has_next()) {
+        cout << lexer.get_next_token() << '\n';
     }
     return 0;    
 }

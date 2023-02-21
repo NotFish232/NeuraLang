@@ -6,32 +6,23 @@
 namespace nl {
 
 enum class TokenType {
-    _eof,
-    _def,
-    _extern,
-    _identifier,
-    _number,
-    _string,
-    _unknownIdentifier,
-    _unknownToken,
-    _leftParen,
-    _rightParen,
-    _null,
+    keyword,    // i.e. def if else for while etc
+    identifier, // i.e. a variable
+    number,
+    string,
+    symbol,     // [](){}|+-*/&&|| etc
+    null
+};
 
-    //add control flow
-    _if,
-    _then,
-    _else
+struct Token {
+    // a null value token that can be returned from functions that require a const &
+    static const Token null;
+    TokenType type;
+    std::string value;
+    size_t line_num;
 };
 
 std::string repr(const TokenType &t);
-
-struct Token {
-    TokenType type;
-    std::string identifier;
-    double numVal;
-};
-
 std::ostream &operator<<(std::ostream &os, const TokenType &t);
 std::ostream &operator<<(std::ostream &os, const Token &token);
 

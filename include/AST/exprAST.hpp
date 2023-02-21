@@ -9,7 +9,6 @@
 #include <llvm/IR/IRBuilder.h>
 
 #include "../../include/neuraLang.hpp"
-#include "../logger.hpp"
 
 // base class for all
 class ExprAST {

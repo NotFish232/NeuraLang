@@ -2,7 +2,8 @@
 #define LEXER_HPP
 
 #include <fstream>
-#include <sstream>
+#include <set>
+#include <vector>
 
 #include "token.hpp"
 
@@ -10,20 +11,26 @@ namespace nl {
 
 class Lexer {
 private:
-    char m_lastChar;
-    std::istream *m_inputStream;
-    Token m_currentToken;
+    const static std::set<std::string> keywords;
+    const static std::set<std::string> valid_symbols;
 
-    Token _getNextToken();
+    std::istream *m_inputStream;
+    std::vector<Token> m_tokens;
+    size_t m_tokenIndex;
 
 public:
     Lexer();
+    Lexer(const std::string &filename);
     Lexer(std::istream &inputStream);
+    ~Lexer();
 
-    void setStream(std::istream &inputStream);
+    void set_stream(std::istream &inputStream);
 
-    Token getCurrentToken() const;
-    Token getNextToken();
+    bool has_next() const;
+    const Token &get_curr_token() const;
+    const Token &get_next_token();
+
+    void parse_tokens();
 };
 
 }

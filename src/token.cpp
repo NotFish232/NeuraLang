@@ -4,29 +4,21 @@ using namespace std;
 
 namespace nl {
 
+const Token Token::null{TokenType::null};
+
 string repr(const TokenType &t) {
     switch (t) {
-    case TokenType::_eof:
-        return "eof";
-    case TokenType::_def:
-        return "def";
-    case TokenType::_extern:
-        return "extern";
-    case TokenType::_identifier:
+    case TokenType::keyword:
+        return "keyword";
+    case TokenType::identifier:
         return "identifier";
-    case TokenType::_number:
+    case TokenType::number:
         return "number";
-    case TokenType::_string:
+    case TokenType::string:
         return "string";
-    case TokenType::_unknownIdentifier:
-        return "unknownIdentifier";
-    case TokenType::_unknownToken:
-        return "unknownToken";
-    case TokenType::_leftParen:
-        return "leftParen";
-    case TokenType::_rightParen:
-        return "rightParen";
-    case TokenType::_null:
+    case TokenType::symbol:
+        return "symbol";
+    case TokenType::null:
         return "null";
     default:
         return "NA";
@@ -38,7 +30,7 @@ ostream &operator<<(ostream &os, const TokenType &t) {
 }
 
 ostream &operator<<(ostream &os, const Token &token) {
-    os << token.type << ", " << token.identifier << ", " << token.numVal << '\n';
+    os << token.type << " - \"" << token.value << "\" (" << token.line_num << ")";
     return os;
 }
 
