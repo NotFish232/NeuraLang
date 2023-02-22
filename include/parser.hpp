@@ -3,15 +3,23 @@
 
 #include <map>
 
+#include <llvm/IR/Module.h>
+#include <llvm/IRReader/IRReader.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/Support/SourceMgr.h>
+#include <llvm/IR/IRBuilder.h>
+
+/*
 #include "AST/binaryExprAST.hpp"
 #include "AST/callExprAST.hpp"
 #include "AST/exprAST.hpp"
 #include "AST/functionAST.hpp"
-#include "AST/numericExprAST.hpp"
-#include "AST/stringExprAST.hpp"
-#include "AST/prototypeAST.hpp"
-#include "AST/variableExprAST.hpp"
 #include "AST/ifExprAST.hpp"
+#include "AST/numericExprAST.hpp"
+#include "AST/prototypeAST.hpp"
+#include "AST/stringExprAST.hpp"
+#include "AST/variableExprAST.hpp"
+*/
 
 #include "lexer.hpp"
 #include "token.hpp"
@@ -22,30 +30,19 @@ class Parser {
 private:
     const static std::map<std::string, int> binary_operator_precedence;
 
+    std::fstream m_fileHandler;
     Lexer m_lexer;
 
-    std::unique_ptr<ExprAST> parseNumberExpr();
-    std::unique_ptr<ExprAST> parseStringExpr();
-    std::unique_ptr<ExprAST> parseParenExpr();
-    std::unique_ptr<ExprAST> parseIdentifierExpr();
-    std::unique_ptr<ExprAST> parsePrimary();
-    std::unique_ptr<ExprAST> parseBinaryOperationRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS);
-    std::unique_ptr<ExprAST> parseExpression();
-    std::unique_ptr<PrototypeAST> parsePrototype();
-    std::unique_ptr<FunctionAST> parseDefinition();
-    std::unique_ptr<FunctionAST> parseTopLevelExpr();
-    std::unique_ptr<PrototypeAST> parseExtern();
-    std::unique_ptr<IfExprAST> parseIfExpr();
+    std::unique_ptr<llvm::LLVMContext> m_ctx;
+    std::unique_ptr<llvm::IRBuilder<>> m_builder;
+    std::unique_ptr<llvm::Module> m_module;
+    // std::map<std::string, llvm::Value *> m_values;
 
-    void handleDefinition();
-    void handleExtern();
-    void handleTopLevelExpression();
-    int getTokenPrecedence() const;
+    
 
 public:
     Parser(const std::string &filename);
-    ~Parser();
-    void parse();
+    ~Parser();void load_module(const std::string &filename);
 };
 
 }

@@ -1,6 +1,7 @@
 #include "../../include/AST/ifExprAST.hpp"
 
 using namespace std;
+using namespace nl;
 using namespace llvm;
 
 IfExprAST::IfExprAST(std::unique_ptr<ExprAST> _condition, std::unique_ptr<ExprAST> _then, std::unique_ptr<ExprAST> _else)

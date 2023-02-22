@@ -19,11 +19,6 @@ Lexer::Lexer() {
     m_inputStream = nullptr;
 }
 
-Lexer::Lexer(const string &filename) {
-    m_tokenIndex = 0;
-    m_inputStream = new ifstream(filename, ios::in);
-}
-
 Lexer::Lexer(istream &inputStream) {
     m_tokenIndex = 0;
     m_inputStream = &inputStream;
@@ -68,7 +63,6 @@ void Lexer::parse_tokens() {
         bool has_line_started = false;
 
         for (size_t i = 0; i < line.length(); ++i) {
-            cout << val << '\n';
             // ignore comments
             if (!has_line_started && line[i] == '#') {
                 break;
@@ -123,7 +117,7 @@ void Lexer::parse_tokens() {
                     }
                     type = TokenType::null;
                     val.clear();
-                    
+
                 } else {
                     val += line[i];
                 }

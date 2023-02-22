@@ -11,9 +11,6 @@ BIN := ./bin
 STD := ./std
 IR := ./IR
 
-STD_FILES := $(shell find $(STD) -name "*.cpp")
-STD_DEP_FILES := $(patsubst %.cpp, $(TEMP)/%.ll, $(notdir $(STD_FILES)))
-
 
 SOURCE_FILES := $(shell find $(SRC) -name "*.cpp")
 DEP_FILES := $(patsubst %.cpp, $(BIN)/%.o, $(notdir $(SOURCE_FILES)))
@@ -22,13 +19,8 @@ DEP_FILES := $(patsubst %.cpp, $(BIN)/%.o, $(notdir $(SOURCE_FILES)))
 all: std build run;
 
 
-std: $(TEMP) $(STD_DEP_FILES)
-	llvm-link $(STD_DEP_FILES) -S -o $(IR)/std.ll
-	rm -r $(TEMP)
-	
-
-$(TEMP)/%.ll: $(STD)/%.cpp
-	clang++ -stdlib=libc++ -S -emit-llvm $^ -o $@
+std: std/std.cpp
+	clang++ -stdlib=libc++ -S -emit-llvm $^ -o "IR/std.ll"
 
 
 
@@ -64,10 +56,6 @@ $(BIN):
 
 $(IR):
 	mkdir $(IR)
-
-$(TEMP):
-	mkdir $(TEMP)
-
 
 
 clean: 

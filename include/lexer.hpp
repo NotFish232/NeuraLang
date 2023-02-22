@@ -20,7 +20,6 @@ private:
 
 public:
     Lexer();
-    Lexer(const std::string &filename);
     Lexer(std::istream &inputStream);
     ~Lexer();
 
