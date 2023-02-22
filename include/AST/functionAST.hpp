@@ -1,15 +1,13 @@
-//
-// Created by piuslee on 2/18/23.
-//
-
-#ifndef FUNCTIONAST_HPP
-#define FUNCTIONAST_HPP
+#ifndef FUNCTION_HPP
+#define FUNCTION_HPP
 
 #include "exprAST.hpp"
 #include "prototypeAST.hpp"
 
 // function syntax tree
 // this represents the function itself.
+
+llvm::Function *make_function_IR(std::unique_ptr<Value *> m_proto, )
 class FunctionAST {
     std::unique_ptr<PrototypeAST> m_proto;
     std::unique_ptr<ExprAST> m_body;

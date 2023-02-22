@@ -3,11 +3,11 @@
 
 #include <map>
 
+#include <llvm/IR/IRBuilder.h>
+#include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IRReader/IRReader.h>
-#include <llvm/IR/LLVMContext.h>
 #include <llvm/Support/SourceMgr.h>
-#include <llvm/IR/IRBuilder.h>
 
 /*
 #include "AST/binaryExprAST.hpp"
@@ -32,17 +32,13 @@ private:
 
     std::fstream m_fileHandler;
     Lexer m_lexer;
-
-    std::unique_ptr<llvm::LLVMContext> m_ctx;
-    std::unique_ptr<llvm::IRBuilder<>> m_builder;
-    std::unique_ptr<llvm::Module> m_module;
     // std::map<std::string, llvm::Value *> m_values;
-
-    
 
 public:
     Parser(const std::string &filename);
-    ~Parser();void load_module(const std::string &filename);
+    ~Parser();
+    void load_module(const std::string &filename);
+    void generate_IR();
 };
 
 }

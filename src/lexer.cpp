@@ -2,7 +2,8 @@
 #include "../include/token.hpp"
 
 using namespace std;
-using namespace nl;
+
+namespace nl {
 
 const set<string> Lexer::keywords = {"def", "for", "while", "if", "else", "break", "continue"};
 // clang-format off
@@ -124,4 +125,6 @@ void Lexer::parse_tokens() {
             }
         }
     }
+}
+
 }

@@ -16,6 +16,15 @@ using namespace std;
 
 int main(int argc, char **argv){
     using namespace nl;
-    Parser parser("examples/functions.nl");
-    parser.load_module("IR/std.ll");
+   // Parser parser("examples/functions.nl");
+   // parser.load_module("IR/std.ll");
+   Lexer lexer;
+   fstream f("examples/functions.nl", ios::in);
+   cout << boolalpha << f.good() << '\n';
+   lexer.set_stream(f);
+   lexer.parse_tokens();
+   while (lexer.has_next()) {
+    cout << lexer.get_next_token() << '\n';
+   }
+   
 }

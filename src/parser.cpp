@@ -1,8 +1,9 @@
 #include "../include/parser.hpp"
 
 using namespace std;
-using namespace nl;
 using namespace llvm;
+
+namespace nl {
 
 // clang-format off
 const map<string, int> Parser::binary_operator_precedence = {
@@ -22,10 +23,6 @@ Parser::Parser(const string &filename) {
     }
     m_lexer.set_stream(m_fileHandler);
 
-    m_ctx = make_unique<LLVMContext>();
-    m_builder = make_unique<IRBuilder<>>(*m_ctx);
-    m_module = make_unique<Module>("Module", *m_ctx);
-
     m_lexer.parse_tokens();
 }
 
@@ -39,4 +36,9 @@ void Parser::load_module(const string &filename) {
     if (!m_module) {
         throw new runtime_error("Unable to load module \"" + filename + "\"");
     }
+}
+
+void Parser::generate_IR() {
+}
+
 }

@@ -5,7 +5,6 @@
 #include "../include/parser.hpp"
 
 using namespace std;
-using namespace nl;
 using namespace llvm;
 
 // for binary operations
