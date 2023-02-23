@@ -30,6 +30,8 @@ class Parser {
 private:
     const static std::map<std::string, int> binary_operator_precedence;
 
+    std::vector<std::string> m_errors;
+
     std::fstream m_fileHandler;
     Lexer m_lexer;
     // std::map<std::string, llvm::Value *> m_values;
@@ -37,8 +39,7 @@ private:
 public:
     Parser(const std::string &filename);
     ~Parser();
-    void load_module(const std::string &filename);
-    void generate_IR();
+    bool generate_IR();
 };
 
 }

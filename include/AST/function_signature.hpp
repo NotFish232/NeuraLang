@@ -2,12 +2,12 @@
 #ifndef FUNCTIONSIGNATUREAST_HPP
 #define FUNCTIONSIGNATUREAST_HPP
 
-#include "base.hpp"
+#include "node_ast.hpp"
 #include "variable.hpp"
 
 namespace nl {
 
-class FunctionSignatureAST : Base {
+class FunctionSignatureAST : NodeAST {
     std::string m_name;
     std::vector<VariableAST> m_args;
     llvm::Type *m_returnType;

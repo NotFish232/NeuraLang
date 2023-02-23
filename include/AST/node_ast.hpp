@@ -8,9 +8,9 @@
 namespace nl {
 
 // base class for all
-class Base {
+class NodeAST {
 public:
-    virtual ~Base() {} // virtual meaning a subclass can override this implentation
+    virtual ~NodeAST() {}
     virtual llvm::Value *make_IR() = 0;
 };
 

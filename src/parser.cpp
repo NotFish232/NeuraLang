@@ -29,16 +29,7 @@ Parser::Parser(const string &filename) {
 Parser::~Parser() {
 }
 
-void Parser::load_module(const string &filename) {
-    // load bitcode
-    SMDiagnostic err;
-    m_module = parseIRFile(filename, err, *m_ctx);
-    if (!m_module) {
-        throw new runtime_error("Unable to load module \"" + filename + "\"");
-    }
-}
-
-void Parser::generate_IR() {
+bool Parser::generate_IR() {
 }
 
 }

@@ -3,13 +3,13 @@
 
 #include <map>
 
-#include "base.hpp"
+#include "node_ast.hpp"
 #include "type.hpp"
 
 // syntax tree for variables
 namespace nl {
 
-class VariableAST : public Base {
+class VariableAST : public NodeAST {
     std::string m_name;
     llvm::Type *m_type;
     std::set<std::string> scope;

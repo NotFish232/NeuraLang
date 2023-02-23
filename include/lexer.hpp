@@ -12,7 +12,7 @@ namespace nl {
 class Lexer {
 private:
     const static std::set<std::string> keywords;
-    const static std::set<std::string> valid_symbols;
+    const static std::set<std::string> valid_long_symbols;
 
     std::istream *m_inputStream;
     std::vector<Token> m_tokens;
@@ -26,8 +26,9 @@ public:
     void set_stream(std::istream &inputStream);
 
     bool has_next() const;
-    const Token &get_curr_token() const;
-    const Token &get_next_token();
+    const Token &get_curr() const;
+    const Token &peek_next() const;
+    const Token &get_next();
 
     void parse_tokens();
 };

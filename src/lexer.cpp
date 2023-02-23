@@ -6,14 +6,7 @@ using namespace std;
 namespace nl {
 
 const set<string> Lexer::keywords = {"def", "for", "while", "if", "else", "break", "continue"};
-// clang-format off
-const set<string> Lexer::valid_symbols = {
-    "=", "+", "+=", "-", "-=", "*", "*=", "/", "/=",
-    "==", "!", "!=", ">", "<", ">=", "<=",
-    ";", ",", ".", "\"", "'", "->",
-    "(", ")", "[", "]", "{", "}"
-};
-// clang-format on
+const set<string> Lexer::valid_long_symbols = {"+=", "-=", "*=", "/=", "==", "!=", ">=", "<=", "->"};
 
 Lexer::Lexer() {
     m_tokenIndex = 0;
@@ -36,11 +29,15 @@ bool Lexer::has_next() const {
     return m_tokens.size() != 0 && m_tokenIndex < m_tokens.size();
 }
 
-const Token &Lexer::get_curr_token() const {
+const Token &Lexer::get_curr() const {
     return m_tokens[m_tokenIndex];
 }
 
-const Token &Lexer::get_next_token() {
+const Token &Lexer::peek_next() const {
+    return has_next() ? m_tokens[m_tokenIndex + 1] : Token::null;
+}
+
+const Token &Lexer::get_next() {
     return has_next() ? m_tokens[m_tokenIndex++] : Token::null;
 }
 
@@ -78,12 +75,15 @@ void Lexer::parse_tokens() {
                 has_line_started = true;
 
                 if (line[i] == '"') {
-                    type = TokenType::string;
+                    type = TokenType::_str;
                     continue; // don't add quote to string
+                } else if (line[i] == '\'') {
+                    type = TokenType::_char;
+                    continue; // same thing as with string
                 } else if (isalpha(line[i])) {
                     type = TokenType::identifier;
                 } else if (isdigit(line[i])) {
-                    type = TokenType::number;
+                    type = TokenType::_num;
                 } else {
                     type = TokenType::symbol;
                 }
@@ -92,11 +92,12 @@ void Lexer::parse_tokens() {
             } else {
                 // clang-format off
                 if (
-                    (isspace(line[i]) && type != TokenType::string) ||
-                    (type == TokenType::string && line[i] == '"') ||
+                    (isspace(line[i]) && type != TokenType::_str && type != TokenType::_char) ||
+                    (type == TokenType::_str && line[i] == '"') ||
+                    (type == TokenType::_char && line[i] == '\'') ||
                     (type == TokenType::identifier && !isalpha(line[i])) ||
-                    (type == TokenType::number && !isdigit(line[i])) ||
-                    (type == TokenType::symbol && valid_symbols.find(val + line[i]) == valid_symbols.end())
+                    (type == TokenType::_num && !isdigit(line[i])) ||
+                    (type == TokenType::symbol && valid_long_symbols.find(val + line[i]) == valid_long_symbols.end())
                     ) { // clang-format on
                     /*
                     3 possible conditions that the identifier / number / symbol has ended
@@ -112,7 +113,7 @@ void Lexer::parse_tokens() {
 
                     m_tokens.push_back({type, val, line_num});
 
-                    if (type != TokenType::string) {
+                    if (type != TokenType::_str && type != TokenType::_char) {
                         // do not reprocess char if it is a string, i.e discard the quote
                         --i;
                     }

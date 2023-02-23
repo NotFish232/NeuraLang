@@ -15,6 +15,5 @@ string out = food(5, 6)
 
 print(out)
 
-print("#hello world 890809348)($*")
-
-        # this is a comment that you shouldn't see
+"this is a' string with si'ngle quotes inside '"
+'this is a char (wit"h multple chars for some r"eason) with " inside'

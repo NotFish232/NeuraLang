@@ -11,6 +11,9 @@ BIN := ./bin
 STD := ./std
 IR := ./IR
 
+SOURCE_DIRS := $(shell find src -type d)
+vpath %.cpp $(SOURCE_DIRS)
+
 
 SOURCE_FILES := $(shell find $(SRC) -name "*.cpp")
 DEP_FILES := $(patsubst %.cpp, $(BIN)/%.o, $(notdir $(SOURCE_FILES)))
@@ -44,12 +47,8 @@ $(BIN)/tests.out: $(BIN) $(DEP_FILES) tests.cpp
 
 
 
-$(BIN)/%.o: $(SRC)/%.cpp
+$(BIN)/%.o: %.cpp
 	$(COMPILE) -c $^ -o $@
-
-$(BIN)/%.o: $(SRC)/*/%.cpp
-	$(COMPILE) -c $^ -o $@
-
 
 $(BIN):
 	mkdir $(BIN)

@@ -19,13 +19,14 @@ const Type *const &VariableAST::get_type() const {
 }
 
 Value *VariableAST::make_IR() {
-    Value *v = values[m_name];
+    /*Value *v = values[m_name];
 
     if (!v)
         mod->getGlobalVariable(m_name);
     Logger::error("unknown var name");
 
-    return v;
+    return v;*/
+    return nullptr;
 }
 
 }

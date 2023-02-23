@@ -8,10 +8,11 @@ namespace nl {
 enum class TokenType {
     keyword,    // i.e. def if else for while etc
     identifier, // i.e. a variable
-    number,
-    string,
+    _num,     // a number
+    _char, // a char
+    _str,     // a string
     symbol,     // [](){}|+-*/&&|| etc
-    null
+    null        // placeholder value
 };
 
 struct Token {

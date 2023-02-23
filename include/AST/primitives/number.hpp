@@ -4,11 +4,11 @@
 #include <llvm/IR/BasicBlock.h>
 #include <llvm/IR/IRBuilder.h>
 
-#include "base.hpp"
+#include "../node_ast.hpp"
 
 namespace nl {
 
-class NumberAST : Base {
+class NumberAST : NodeAST {
 private:
     std::string m_value, m_type;
 

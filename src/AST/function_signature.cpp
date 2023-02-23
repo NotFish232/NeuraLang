@@ -27,8 +27,8 @@ const Type *const &FunctionSignatureAST::get_return_type() const {
     return m_returnType;
 }
 
-Value *FunctionSignatureAST::make_IR() {
-    vector<Type *> Doubles(m_args.size(), Type::getDoubleTy(*ctx));
+Function *FunctionSignatureAST::make_IR() {
+    /*vector<Type *> Doubles(m_args.size(), Type::getDoubleTy(*ctx));
     FunctionType *FT = FunctionType::get(Type::getDoubleTy(*ctx), Doubles, false);
     Function *F = Function::Create(FT, Function::ExternalLinkage, m_name, mod.get());
 
@@ -37,7 +37,8 @@ Value *FunctionSignatureAST::make_IR() {
         arg.setName(m_args[i++]);
     }
 
-    return F;
+    return F;*/
+    return nullptr;
 }
 
 }

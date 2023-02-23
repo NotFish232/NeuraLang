@@ -9,7 +9,7 @@
         totalTest++;                                                                                         \
     } while (false)
 
-#include "include/parser.hpp"
+#include "include/lexer.hpp"
 #include <iostream>
 
 using namespace std;
@@ -20,11 +20,10 @@ int main(int argc, char **argv){
    // parser.load_module("IR/std.ll");
    Lexer lexer;
    fstream f("examples/functions.nl", ios::in);
-   cout << boolalpha << f.good() << '\n';
    lexer.set_stream(f);
    lexer.parse_tokens();
    while (lexer.has_next()) {
-    cout << lexer.get_next_token() << '\n';
+    cout << lexer.get_next() << '\n';
    }
    
 }

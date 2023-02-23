@@ -12,10 +12,12 @@ string repr(const TokenType &t) {
         return "keyword";
     case TokenType::identifier:
         return "identifier";
-    case TokenType::number:
+    case TokenType::_num:
         return "number";
-    case TokenType::string:
+    case TokenType::_str:
         return "string";
+    case TokenType::_char:
+        return "char";
     case TokenType::symbol:
         return "symbol";
     case TokenType::null:
