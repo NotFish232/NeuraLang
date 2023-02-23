@@ -9,9 +9,12 @@ using namespace llvm;
 
 namespace nl {
 
-FunctionSignatureAST::FunctionSignatureAST(const string &name, const vector<VariableAST> &args, const string &returnTypeStr) {
+FunctionSignatureAST::FunctionSignatureAST(const string &name, const vector<unique_ptr<VariableAST>> &args, const string &returnTypeStr) {
     m_name = name;
-    m_args = args;
+    /*m_args.reserve(args.size());
+    for (const auto &arg: args) {
+        m_args.push_back(move(arg));
+    }*/
     m_returnType = get_type_from_str(returnTypeStr);
 }
 
@@ -19,7 +22,7 @@ const string &FunctionSignatureAST::get_name() const {
     return m_name;
 }
 
-const vector<VariableAST> &FunctionSignatureAST::get_args() const {
+const vector<unique_ptr<VariableAST>> &FunctionSignatureAST::get_args() const {
     return m_args;
 }
 

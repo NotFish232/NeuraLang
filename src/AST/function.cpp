@@ -1,20 +1,34 @@
-#include "../../include/AST/func.hpp"
+#include "../../include/AST/function.hpp"
 
 using namespace std;
 using namespace llvm;
 
-FunctionAST::FunctionAST(unique_ptr<PrototypeAST> proto, unique_ptr<ExprAST> body) 
-: m_proto(std::move(proto)), m_body(std::move(body)) {}
+namespace nl {
 
-Function *FunctionAST::codegen() {
-    Function *function = mod->getFunction(m_proto->getName());
+FunctionAST::FunctionAST(unique_ptr<FunctionSignatureAST> sig, unique_ptr<BlockAST> body) {
+    m_signature = move(sig);
+    m_body = move(body);
+}
 
-    if (!function)
-        function = m_proto->codegen();
+FunctionAST::~FunctionAST() {
+
+}
+
+const unique_ptr<FunctionSignatureAST> &FunctionAST::get_signature() const {
+    return m_signature;
+}
+
+const unique_ptr<BlockAST> &FunctionAST::get_body() const {
+    return m_body;
+}  
+
+Function *FunctionAST::make_IR() {
+    Function *function = m_signature -> make_IR();
+
     if (!function)
         return nullptr;
 
-    BasicBlock *block = BasicBlock::Create(*ctx, "entry", function);
+    /*BasicBlock *block = BasicBlock::Create(*ctx, "entry", function);
     builder->SetInsertPoint(block);
     values.clear();
 
@@ -29,6 +43,8 @@ Function *FunctionAST::codegen() {
         return function;
     }
 
-    function->eraseFromParent();
+    function->eraseFromParent();*/
     return nullptr;
+}
+
 }

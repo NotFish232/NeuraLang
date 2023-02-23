@@ -10,6 +10,9 @@ VariableAST::VariableAST(const string &name, const string &typeStr) {
     m_type = get_type_from_str(typeStr);
 }
 
+VariableAST::~VariableAST() {
+}
+
 const string &VariableAST::get_name() const {
     return m_name;
 }

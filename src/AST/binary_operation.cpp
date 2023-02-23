@@ -5,28 +5,47 @@ using namespace llvm;
 
 namespace nl {
 
-BinaryOperation::BinaryOperation(unique_ptr<NodeAST> left, unique_ptr<NodeAST> right, const string &op) {
+BinaryOperationAST::BinaryOperationAST(unique_ptr<NodeAST> left, unique_ptr<NodeAST> right, const string &op) {
     m_left = move(left);
     m_right = move(right);
     m_operator = op;
 }
 
-BinaryOperation::~BinaryOperation() {
+BinaryOperationAST::~BinaryOperationAST() {
 }
 
-const unique_ptr<NodeAST> &BinaryOperation::get_left() const {
+const unique_ptr<NodeAST> &BinaryOperationAST::get_left() const {
     return m_left;
 }
 
-const unique_ptr<NodeAST> &BinaryOperation::get_right() const {
+const unique_ptr<NodeAST> &BinaryOperationAST::get_right() const {
     return m_right;
 }
 
-const string &BinaryOperation::get_operator() const {
+const string &BinaryOperationAST::get_operator() const {
     return m_operator;
 }
 
-Value *BinaryOperation::make_IR() {
+Value *BinaryOperationAST::make_IR() {
+    Value *left_IR = m_left->make_IR();
+    Value *right_IR = m_right->make_IR();
+
+    if (m_operator == "+") {
+        return builder->CreateFAdd(left_IR, right_IR);
+    } else if (m_operator == "-") {
+        return builder->CreateFSub(left_IR, right_IR);
+    } else if (m_operator == "*") {
+        return builder->CreateFMul(left_IR, right_IR);
+    } else if (m_operator == "/") {
+        return builder->CreateFDiv(left_IR, right_IR);
+    } else if (m_operator == "^") {
+        // builtin pow somehow
+        return nullptr;
+    } else if (m_operator == "%") {
+        return nullptr;
+    } else {
+        return nullptr;
+    }
 }
 
 }

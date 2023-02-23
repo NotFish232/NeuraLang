@@ -1,13 +1,23 @@
-#include "../../include/AST/ifExprAST.hpp"
+#include "../../include/AST/if_expression.hpp"
 
 using namespace std;
-using namespace nl;
 using namespace llvm;
 
-IfExprAST::IfExprAST(std::unique_ptr<ExprAST> _condition, std::unique_ptr<ExprAST> _then, std::unique_ptr<ExprAST> _else)
-    :m_condition(std::move(_condition)), m_then(std::move(_then)), m_else(std::move(_else)) {}
+namespace nl {
 
-Value *IfExprAST::codegen() {
+IfExpressionAST::IfExpressionAST(unique_ptr<BooleanExpressionAST> condition, unique_ptr<BlockAST> then_block, unique_ptr<BlockAST> else_block) {
+        m_condition = move(condition);
+        m_then = move(then_block);
+        m_else = move(else_block);
+
+    }
+
+IfExpressionAST::~IfExpressionAST() {
+
+}
+
+Value *IfExpressionAST::make_IR() {
+    /*
     Value *condition = m_condition->codegen();
     if (!condition) return nullptr;
 
@@ -48,4 +58,8 @@ Value *IfExprAST::codegen() {
     PN->addIncoming(ThenV, thenBB);
     PN->addIncoming(ElseV, elseBB);
     return PN;
+    */
+   return nullptr;
+}
+
 }

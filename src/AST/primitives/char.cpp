@@ -5,21 +5,21 @@ using namespace llvm;
 
 namespace nl {
 
-const size_t Char::default_num_bits = 8;
+const size_t CharAST::default_num_bits = 8;
 
-Char::Char(const string &value, size_t numBits) {
+CharAST::CharAST(const string &value, size_t numBits) {
     m_value = value;
     m_numBits = numBits;
 }
 
-Char::~Char() {
+CharAST::~CharAST() {
 }
 
-const string &Char::get_value() const {
+const string &CharAST::get_value() const {
     return m_value;
 }
 
-Value *Char::make_IR() {
+Value *CharAST::make_IR() {
     return ConstantInt::get(*ctx, APInt(m_numBits, m_value, 10));
 }
 

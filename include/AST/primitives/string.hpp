@@ -1,11 +1,11 @@
 #ifndef STRING_HPP
 #define STRING_HPP
 
-#include "../node_ast.hpp"
+#include "../node.hpp"
 
 namespace nl {
 
-class StringAST : NodeAST {
+class StringAST : public NodeAST {
 private:
     std::string m_value;
 

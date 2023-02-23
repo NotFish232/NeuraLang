@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "node_ast.hpp"
+#include "node.hpp"
 #include "type.hpp"
 
 // syntax tree for variables
