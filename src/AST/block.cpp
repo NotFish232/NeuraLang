@@ -13,11 +13,11 @@ BlockAST::~BlockAST() {
 
 }
 
-void BlockAST::add(unique_ptr<NodeAST> expr) {
-    m_contents.push_back(move(expr));
+void BlockAST::add(NodeAST expr) {
+    m_contents.push_back(expr);
 }
 
-Value *BlockAST::make_IR() {
+Value *BlockAST::make_IR() const {
     return nullptr;
 }
 

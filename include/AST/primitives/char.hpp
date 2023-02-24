@@ -16,7 +16,7 @@ public:
     CharAST(const std::string &value, size_t numBits = default_num_bits);
     ~CharAST();
     const std::string &get_value() const;
-    llvm::Value *make_IR() override;
+    llvm::Value *make_IR() const override;
 };
 
 }

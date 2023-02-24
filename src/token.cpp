@@ -36,4 +36,8 @@ ostream &operator<<(ostream &os, const Token &token) {
     return os;
 }
 
+Token::operator bool() const {
+    return type != TokenType::null;
+}
+
 }

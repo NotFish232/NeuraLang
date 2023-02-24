@@ -8,16 +8,16 @@
 namespace nl {
 
 class IfExpressionAST : public NodeAST {
-    std::unique_ptr<BooleanExpressionAST> m_condition;
-    std::unique_ptr<BlockAST> m_then, m_else;
+    BooleanExpressionAST m_condition;
+    BlockAST m_then, m_else;
 
 public:
-    IfExpressionAST(std::unique_ptr<BooleanExpressionAST> condition,
-                    std::unique_ptr<BlockAST> then_block,
-                    std::unique_ptr<BlockAST> else_block);
+    IfExpressionAST(BooleanExpressionAST condition,
+                    BlockAST then_block,
+                    BlockAST else_block);
     ~IfExpressionAST();
 
-    llvm::Value *make_IR() override;
+    llvm::Value *make_IR() const override;
 };
 
 }

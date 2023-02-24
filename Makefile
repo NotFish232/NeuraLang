@@ -19,7 +19,7 @@ SOURCE_FILES := $(shell find $(SRC) -name "*.cpp")
 DEP_FILES := $(patsubst %.cpp, $(BIN)/%.o, $(notdir $(SOURCE_FILES)))
 
 
-all: std build run;
+all: build;
 
 
 std: std/std.cpp

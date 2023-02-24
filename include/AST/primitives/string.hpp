@@ -13,7 +13,7 @@ public:
     StringAST(const std::string &value);
     ~StringAST();
     const std::string &get_value() const;
-    llvm::Value *make_IR() override;
+    llvm::Value *make_IR() const override;
 };
 
 }

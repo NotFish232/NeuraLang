@@ -5,8 +5,8 @@ using namespace std;
 
 namespace nl {
 
-const set<string> Lexer::keywords = {"def", "for", "while", "if", "else", "break", "continue"};
-const set<string> Lexer::valid_long_symbols = {"+=", "-=", "*=", "/=", "==", "!=", ">=", "<=", "->"};
+const set<string> Lexer::keywords = {"def", "for", "while", "if", "else", "break", "continue", "return"};
+const set<string> Lexer::valid_long_symbols = {"+=", "-=", "*=", "/=", "==", "!=", ">=", "<=", "->", "++", "--", "&&", "**"};
 
 Lexer::Lexer() {
     m_tokenIndex = 0;
@@ -26,15 +26,15 @@ void Lexer::set_stream(istream &inputStream) {
 }
 
 bool Lexer::has_next() const {
-    return m_tokens.size() != 0 && m_tokenIndex < m_tokens.size();
+    return m_tokenIndex < m_tokens.size();
 }
 
 const Token &Lexer::get_curr() const {
-    return m_tokens[m_tokenIndex];
+    return m_tokenIndex != 0 ? m_tokens[m_tokenIndex - 1] : Token::null;
 }
 
 const Token &Lexer::peek_next() const {
-    return has_next() ? m_tokens[m_tokenIndex + 1] : Token::null;
+    return has_next() ? m_tokens[m_tokenIndex] : Token::null;
 }
 
 const Token &Lexer::get_next() {
@@ -66,6 +66,8 @@ void Lexer::parse_tokens() {
                 break;
             }
 
+            char ch = line[i];
+
             if (type == TokenType::null) {
                 // ignore spaces
                 if (isspace(line[i])) {
@@ -74,37 +76,39 @@ void Lexer::parse_tokens() {
 
                 has_line_started = true;
 
-                if (line[i] == '"') {
+                if (ch == '"') {
                     type = TokenType::_str;
                     continue; // don't add quote to string
-                } else if (line[i] == '\'') {
+                } else if (ch == '\'') {
                     type = TokenType::_char;
                     continue; // same thing as with string
-                } else if (isalpha(line[i])) {
+                } else if (isalpha(ch)) {
                     type = TokenType::identifier;
-                } else if (isdigit(line[i])) {
+                } else if (isdigit(ch)) {
                     type = TokenType::_num;
                 } else {
                     type = TokenType::symbol;
                 }
 
-                val += line[i];
+                val += ch;
             } else {
                 // clang-format off
                 if (
-                    (isspace(line[i]) && type != TokenType::_str && type != TokenType::_char) ||
-                    (type == TokenType::_str && line[i] == '"') ||
-                    (type == TokenType::_char && line[i] == '\'') ||
-                    (type == TokenType::identifier && !isalpha(line[i])) ||
-                    (type == TokenType::_num && !isdigit(line[i])) ||
+                    (isspace(ch) && type != TokenType::_str && type != TokenType::_char) ||
+                    (type == TokenType::_str && ch == '"') ||
+                    (type == TokenType::_char && ch == '\'') ||
+                    (type == TokenType::identifier && !isalpha(ch) && !isdigit(ch)) ||
+                    (type == TokenType::_num && !isdigit(ch) && (ch != '.' || val.find('.') != string::npos)) ||
                     (type == TokenType::symbol && valid_long_symbols.find(val + line[i]) == valid_long_symbols.end())
                     ) { // clang-format on
                     /*
-                    3 possible conditions that the identifier / number / symbol has ended
-                        1. followed by a space, and is not a string
-                        2. another quote meaning string has ended
-                        3. number is followed by NaN, doubles will be implemented later by AST
-                        4. adding the next character makes it not a valid symbol
+                    6 possible conditions that the identifier / number / symbol has ended
+                        1. followed by a space, and is not a string or char
+                        2. another double quote meaning string has ended
+                        3. another single quote meaning character has ended
+                        4. identifer string followed by a non alpha, not digit character
+                        5. number is followed by NaN and either not a period or a period and it already has a period
+                        6. adding the next character makes it not a valid symbol
                     */
 
                     if (type == TokenType::identifier && keywords.find(val) != keywords.end()) {
@@ -121,7 +125,7 @@ void Lexer::parse_tokens() {
                     val.clear();
 
                 } else {
-                    val += line[i];
+                    val += ch;
                 }
             }
         }

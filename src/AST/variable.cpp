@@ -5,9 +5,9 @@ using namespace llvm;
 
 namespace nl {
 
-VariableAST::VariableAST(const string &name, const string &typeStr) {
+VariableAST::VariableAST(const string &name, Type *type) {
     m_name = name;
-    m_type = get_type_from_str(typeStr);
+    m_type = type;
 }
 
 VariableAST::~VariableAST() {
@@ -21,7 +21,7 @@ const Type *const &VariableAST::get_type() const {
     return m_type;
 }
 
-Value *VariableAST::make_IR() {
+Value *VariableAST::make_IR() const {
     /*Value *v = values[m_name];
 
     if (!v)

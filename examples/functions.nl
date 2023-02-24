@@ -1,19 +1,20 @@
-def foo(i32 a, i32 b) -> i32 {
+int:32 foo(int:32:s a, int:32:u b)  {
     int i = 0
+    for (int i = 0; i < 10; ++i)
     while (i < 10) {
-        print(i)
-        i = i + 1
-        i += 1
+        print(i);
+        i = i + 1;
+        i += 1;
     }
     return i
 }
 
-def test(){}
+int:32 hi;
+hi = foo(5, 6);
 
-
-string out = food(5, 6)
-
-print(out)
-
-"this is a' string with si'ngle quotes inside '"
-'this is a char (wit"h multple chars for some r"eason) with " inside'
+return5 -> return 5
+return4ihkh -> valid var name
+50.8094328
+50.809.9843890.0
+79879
+.0

@@ -19,7 +19,7 @@ const string &CharAST::get_value() const {
     return m_value;
 }
 
-Value *CharAST::make_IR() {
+Value *CharAST::make_IR() const {
     return ConstantInt::get(*ctx, APInt(m_numBits, m_value, 10));
 }
 

@@ -7,10 +7,8 @@ using namespace llvm;
 
 int main(int argc, char **argv) {
 
-    string filename = "examples/hello_world.nl";
-    if (argc != 1) {
-        filename = argv[1];
-    }
+    //Lexer lexer; fstream f("examples/functions.nl", ios::in); lexer.set_stream(f); lexer.parse_tokens();  while (lexer.has_next()) cout << lexer.get_next() << '\n';
+    string filename = "examples/functions.nl";
 
     Parser parser(filename);
     parser.generate_IR();

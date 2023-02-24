@@ -1,5 +1,5 @@
-#ifndef BINARYOPERATION_HPP
-#define BINARYOPERATION_HPP
+#ifndef BOOLEANOPERATION_HPP
+#define BOOLEANOPERATION_HPP
 
 #include "node.hpp"
 
@@ -9,16 +9,16 @@
 namespace nl {
 
 class BooleanExpressionAST : public NodeAST {
-    std::unique_ptr<NodeAST> m_left, m_right;
+    NodeAST m_left, m_right;
     std::string m_operator;
 
 public:
-    BooleanExpressionAST(std::unique_ptr<NodeAST> left, std::unique_ptr<NodeAST> right, const std::string &op);
+    BooleanExpressionAST(NodeAST left, NodeAST right, const std::string &op);
     ~BooleanExpressionAST();
-    const std::unique_ptr<NodeAST> &get_left() const;
-    const std::unique_ptr<NodeAST> &get_right() const;
+    const NodeAST &get_left() const;
+    const NodeAST &get_right() const;
     const std::string &get_operator() const;
-    llvm::Value *make_IR() override;
+    llvm::Value *make_IR() const override;
 };
 
 };

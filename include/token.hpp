@@ -21,11 +21,14 @@ struct Token {
     TokenType type;
     std::string value;
     size_t line_num;
+
+    operator bool() const;
 };
 
 std::string repr(const TokenType &t);
 std::ostream &operator<<(std::ostream &os, const TokenType &t);
 std::ostream &operator<<(std::ostream &os, const Token &token);
+
 
 }
 

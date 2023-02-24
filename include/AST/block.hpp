@@ -7,13 +7,13 @@ namespace nl {
 
 class BlockAST : public NodeAST {
 private:
-    std::vector<std::unique_ptr<NodeAST>> m_contents;
+    std::vector<NodeAST> m_contents;
 
 public:
     BlockAST();
     ~BlockAST();
-    void add(std::unique_ptr<NodeAST> expr);
-    llvm::Value *make_IR() override;
+    void add(NodeAST expr);
+    llvm::Value *make_IR() const override;
 };
 
 };

@@ -10,14 +10,13 @@ namespace nl {
 
 class NumberAST : public NodeAST {
 private:
-    std::string m_value, m_type;
+    std::string m_value;
 
 public:
-    NumberAST(const std::string &value, const std::string &type);
+    NumberAST(const std::string &value);
     ~NumberAST();
     const std::string &get_value() const;
-    const std::string &get_type() const;
-    llvm::Value *make_IR() override;
+    llvm::Value *make_IR() const override;
 };
 
 }

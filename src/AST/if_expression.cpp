@@ -5,18 +5,18 @@ using namespace llvm;
 
 namespace nl {
 
-IfExpressionAST::IfExpressionAST(unique_ptr<BooleanExpressionAST> condition, unique_ptr<BlockAST> then_block, unique_ptr<BlockAST> else_block) {
-        m_condition = move(condition);
-        m_then = move(then_block);
-        m_else = move(else_block);
-
+IfExpressionAST::IfExpressionAST(BooleanExpressionAST condition, BlockAST then_block, BlockAST else_block):
+m_condition(condition) {
+        m_then = then_block;
+        m_else = else_block;
     }
 
 IfExpressionAST::~IfExpressionAST() {
 
 }
 
-Value *IfExpressionAST::make_IR() {
+
+Value *IfExpressionAST::make_IR() const {
     /*
     Value *condition = m_condition->codegen();
     if (!condition) return nullptr;

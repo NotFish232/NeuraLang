@@ -5,25 +5,24 @@ using namespace llvm;
 
 namespace nl {
 
-FunctionAST::FunctionAST(unique_ptr<FunctionSignatureAST> sig, unique_ptr<BlockAST> body) {
-    m_signature = move(sig);
-    m_body = move(body);
+FunctionAST::FunctionAST(FunctionSignatureAST signature, BlockAST body): m_signature(signature) {
+    m_body = body;
 }
 
 FunctionAST::~FunctionAST() {
 
 }
 
-const unique_ptr<FunctionSignatureAST> &FunctionAST::get_signature() const {
+const FunctionSignatureAST &FunctionAST::get_signature() const {
     return m_signature;
 }
 
-const unique_ptr<BlockAST> &FunctionAST::get_body() const {
+const BlockAST &FunctionAST::get_body() const {
     return m_body;
 }  
 
-Function *FunctionAST::make_IR() {
-    Function *function = m_signature -> make_IR();
+Function *FunctionAST::make_IR() const {
+    Function *function = m_signature.make_IR();
 
     if (!function)
         return nullptr;

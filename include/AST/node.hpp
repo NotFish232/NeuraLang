@@ -10,8 +10,8 @@ namespace nl {
 // base class for all
 class NodeAST {
 public:
-    virtual ~NodeAST() {}
-    virtual llvm::Value *make_IR() = 0;
+    virtual ~NodeAST();
+    virtual llvm::Value *make_IR() const;
 };
 
 }

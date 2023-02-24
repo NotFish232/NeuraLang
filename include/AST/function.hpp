@@ -8,16 +8,16 @@
 namespace nl {
 
 class FunctionAST: public NodeAST {
-    std::unique_ptr<FunctionSignatureAST> m_signature;
-    std::unique_ptr<BlockAST> m_body;
+    FunctionSignatureAST m_signature;
+    BlockAST m_body;
 
 public:
-    FunctionAST(std::unique_ptr<FunctionSignatureAST> sig, std::unique_ptr<BlockAST> body);
+    FunctionAST(FunctionSignatureAST signature, BlockAST body);
     ~FunctionAST();
 
-    const std::unique_ptr<FunctionSignatureAST> &get_signature() const;
-    const std::unique_ptr<BlockAST> &get_body() const;
-    llvm::Function *make_IR() override;
+    const FunctionSignatureAST &get_signature() const;
+    const BlockAST &get_body() const;
+    llvm::Function *make_IR() const override;
 };
 
 }

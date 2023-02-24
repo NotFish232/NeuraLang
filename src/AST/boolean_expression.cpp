@@ -5,20 +5,20 @@ using namespace llvm;
 
 namespace nl {
 
-BooleanExpressionAST::BooleanExpressionAST(unique_ptr<NodeAST> left, unique_ptr<NodeAST> right, const string &op) {
-    m_left = move(left);
-    m_right = move(right);
+BooleanExpressionAST::BooleanExpressionAST(NodeAST left, NodeAST right, const string &op) {
+    m_left = left;
+    m_right = right;
     m_operator = op;
 }
 
 BooleanExpressionAST::~BooleanExpressionAST() {
 }
 
-const unique_ptr<NodeAST> &BooleanExpressionAST::get_left() const {
+const NodeAST &BooleanExpressionAST::get_left() const {
     return m_left;
 }
 
-const unique_ptr<NodeAST> &BooleanExpressionAST::get_right() const {
+const NodeAST &BooleanExpressionAST::get_right() const {
     return m_right;
 }
 
@@ -26,9 +26,9 @@ const string &BooleanExpressionAST::get_operator() const {
     return m_operator;
 }
 
-Value *BooleanExpressionAST::make_IR() {
-    Value *left_IR = m_left->make_IR();
-    Value *right_IR = m_right->make_IR();
+Value *BooleanExpressionAST::make_IR() const {
+    Value *left_IR = m_left.make_IR();
+    Value *right_IR = m_right.make_IR();
 
     if (!left_IR || !right_IR) {
         return nullptr;
