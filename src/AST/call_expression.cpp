@@ -25,7 +25,7 @@ const vector<NodeAST> &CallExpressionAST::get_args() const {
     return m_args;
 }
 
-Value *CallExpressionAST::make_IR() const {
+Value *CallExpressionAST::make_IR(ValueMap &scope) const {
     Function *func = mod->getFunction(m_func_name);
 
     if (!func) {
@@ -38,7 +38,7 @@ Value *CallExpressionAST::make_IR() const {
 
     vector<Value *> args;
     for (auto &arg : m_args) {
-        args.push_back(arg.make_IR());
+        args.push_back(arg.make_IR(scope));
         if (!args.back()) {
             return nullptr;
         }

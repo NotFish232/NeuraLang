@@ -1,5 +1,5 @@
-#ifndef EXPR_HPP
-#define EXPR_HPP
+#ifndef NODE_HPP
+#define NODE_HPP
 
 #include <llvm/IR/IRBuilder.h>
 

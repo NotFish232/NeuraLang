@@ -3,6 +3,7 @@
 
 #include "node.hpp"
 #include "function_signature.hpp"
+#include "return_expression.hpp"
 
 namespace nl {
 

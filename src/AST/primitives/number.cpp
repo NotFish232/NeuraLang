@@ -1,5 +1,5 @@
 #include "../../../include/AST/primitives/number.hpp"
-
+#include <iostream>
 using namespace std;
 using namespace llvm;
 
@@ -18,6 +18,13 @@ const string &NumberAST::get_value() const {
 
 
 Value *NumberAST::make_IR(ValueMap &scope) const {
+    cout << "in number ir \n";
+    return ConstantInt::get(*ctx, APInt(32, 0, 10));
+    if (m_value.find(".") != string::npos) {
+        return ConstantFP::get(*ctx, APFloat(stof(m_value)));
+    } else {
+        return ConstantInt::get(*ctx, APInt(32, m_value, 10));
+    }
     // ints can be arbitrary precission
     /*if (m_type == "float") {
         return ConstantFP::get(*ctx, APFloat(stod(m_value)));

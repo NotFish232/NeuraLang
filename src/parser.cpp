@@ -20,7 +20,9 @@ Parser::~Parser() {
 
 FunctionAST Parser::make_main_function() {
     FunctionSignatureAST func_sig("main", vector<VariableAST>(), Type::getInt32Ty(*ctx));
-    FunctionAST function(func_sig, vector<NodeAST>());
+    vector<NodeAST> v;
+    v.push_back(ReturnExpressionAST(NumberAST("0")));
+    FunctionAST function(func_sig, v);
     return function;
 }
 
