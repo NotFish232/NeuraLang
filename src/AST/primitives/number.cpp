@@ -17,7 +17,7 @@ const string &NumberAST::get_value() const {
 }
 
 
-Value *NumberAST::make_IR() const {
+Value *NumberAST::make_IR(ValueMap &scope) const {
     // ints can be arbitrary precission
     /*if (m_type == "float") {
         return ConstantFP::get(*ctx, APFloat(stod(m_value)));

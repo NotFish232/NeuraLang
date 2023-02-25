@@ -9,8 +9,8 @@ using namespace llvm;
 
 namespace nl {
 
-CallExpressionAST::CallExpressionAST(const string &funcName, const vector<NodeAST> &args) {
-    m_funcName = funcName;
+CallExpressionAST::CallExpressionAST(const string &func_name, const vector<NodeAST> &args) {
+    m_func_name = func_name;
     m_args = args;
 }
 
@@ -18,7 +18,7 @@ CallExpressionAST::~CallExpressionAST() {
 }
 
 const string &CallExpressionAST::get_func_name() const {
-    return m_funcName;
+    return m_func_name;
 }
 
 const vector<NodeAST> &CallExpressionAST::get_args() const {
@@ -26,7 +26,7 @@ const vector<NodeAST> &CallExpressionAST::get_args() const {
 }
 
 Value *CallExpressionAST::make_IR() const {
-    Function *func = mod->getFunction(m_funcName);
+    Function *func = mod->getFunction(m_func_name);
 
     if (!func) {
         return nullptr;

@@ -16,7 +16,7 @@ const string &StringAST::get_value() const {
     return m_value;
 }
 
-Value *StringAST::make_IR() const {
+Value *StringAST::make_IR(ValueMap &scope) const {
     // return builder->CreateGlobalString(StringRef(m_str));
     return nullptr;
 }

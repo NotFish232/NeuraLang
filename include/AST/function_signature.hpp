@@ -20,7 +20,7 @@ public:
     const std::string &get_name() const;
     const std::vector<VariableAST> &get_args() const;
     const llvm::Type *const &get_return_type() const;
-    llvm::Function *make_IR() const override;
+    llvm::Function *make_IR(ValueMap &scope) const override;
 };
 
 }

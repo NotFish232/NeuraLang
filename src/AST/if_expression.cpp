@@ -5,7 +5,7 @@ using namespace llvm;
 
 namespace nl {
 
-IfExpressionAST::IfExpressionAST(BooleanExpressionAST condition, BlockAST then_block, BlockAST else_block):
+IfExpressionAST::IfExpressionAST(BooleanExpressionAST condition, vector<NodeAST> then_block, vector<NodeAST> else_block):
 m_condition(condition) {
         m_then = then_block;
         m_else = else_block;
@@ -16,7 +16,7 @@ IfExpressionAST::~IfExpressionAST() {
 }
 
 
-Value *IfExpressionAST::make_IR() const {
+Value *IfExpressionAST::make_IR(ValueMap &scope) const {
     /*
     Value *condition = m_condition->codegen();
     if (!condition) return nullptr;

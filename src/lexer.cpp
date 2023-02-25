@@ -1,57 +1,53 @@
 #include "../include/lexer.hpp"
-#include "../include/token.hpp"
 
 using namespace std;
 
 namespace nl {
 
-const set<string> Lexer::keywords = {"def", "for", "while", "if", "else", "break", "continue", "return"};
-const set<string> Lexer::valid_long_symbols = {"+=", "-=", "*=", "/=", "==", "!=", ">=", "<=", "->", "++", "--", "&&", "**"};
-
 Lexer::Lexer() {
-    m_tokenIndex = 0;
-    m_inputStream = nullptr;
+    m_token_index = 0;
+    m_input_stream = nullptr;
 }
 
 Lexer::Lexer(istream &inputStream) {
-    m_tokenIndex = 0;
-    m_inputStream = &inputStream;
+    m_token_index = 0;
+    m_input_stream = &inputStream;
 }
 
 Lexer::~Lexer() {
 }
 
 void Lexer::set_stream(istream &inputStream) {
-    m_inputStream = &inputStream;
+    m_input_stream = &inputStream;
 }
 
 bool Lexer::has_next() const {
-    return m_tokenIndex < m_tokens.size();
+    return m_token_index < m_tokens.size();
 }
 
 const Token &Lexer::get_curr() const {
-    return m_tokenIndex != 0 ? m_tokens[m_tokenIndex - 1] : Token::null;
+    return m_token_index != 0 ? m_tokens[m_token_index - 1] : Token::null;
 }
 
 const Token &Lexer::peek_next() const {
-    return has_next() ? m_tokens[m_tokenIndex] : Token::null;
+    return has_next() ? m_tokens[m_token_index] : Token::null;
 }
 
 const Token &Lexer::get_next() {
-    return has_next() ? m_tokens[m_tokenIndex++] : Token::null;
+    return has_next() ? m_tokens[m_token_index++] : Token::null;
 }
 
 void Lexer::parse_tokens() {
-    if (m_inputStream == nullptr) {
+    if (m_input_stream == nullptr) {
         throw new runtime_error("Lexer's input stream must be set before parsing tokens.");
     }
 
-    if (!m_inputStream->good()) {
+    if (!m_input_stream->good()) {
         throw new runtime_error("Bad input stream");
     }
 
     size_t line_num = 1;
-    for (string line; getline(*m_inputStream, line); ++line_num) {
+    for (string line; getline(*m_input_stream, line); ++line_num) {
         line += '\n'; // force code to parse token at end of line
 
         TokenType type = TokenType::null;

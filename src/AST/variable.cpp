@@ -17,19 +17,12 @@ const string &VariableAST::get_name() const {
     return m_name;
 }
 
-const Type *const &VariableAST::get_type() const {
+Type *VariableAST::get_type() const {
     return m_type;
 }
 
-Value *VariableAST::make_IR() const {
-    /*Value *v = values[m_name];
-
-    if (!v)
-        mod->getGlobalVariable(m_name);
-    Logger::error("unknown var name");
-
-    return v;*/
-    return nullptr;
+Value *VariableAST::make_IR(ValueMap &scope) const {
+    return scope.find(m_name) != scope.end() ?  scope[m_name] : nullptr;
 }
 
 }

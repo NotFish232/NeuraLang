@@ -4,6 +4,9 @@
 #include <llvm/IR/IRBuilder.h>
 
 #include "../neuralang.hpp"
+#include <map>
+
+using ValueMap = std::map<std::string, llvm::Value *>;
 
 namespace nl {
 
@@ -11,7 +14,7 @@ namespace nl {
 class NodeAST {
 public:
     virtual ~NodeAST();
-    virtual llvm::Value *make_IR() const;
+    virtual llvm::Value *make_IR(ValueMap &scope) const;
 };
 
 }

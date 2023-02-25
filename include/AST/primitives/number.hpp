@@ -16,7 +16,7 @@ public:
     NumberAST(const std::string &value);
     ~NumberAST();
     const std::string &get_value() const;
-    llvm::Value *make_IR() const override;
+    llvm::Value *make_IR(ValueMap &scope) const override;
 };
 
 }

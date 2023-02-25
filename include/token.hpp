@@ -8,9 +8,9 @@ namespace nl {
 enum class TokenType {
     keyword,    // i.e. def if else for while etc
     identifier, // i.e. a variable
-    _num,     // a number
-    _char, // a char
-    _str,     // a string
+    _num,       // a number
+    _char,      // a char
+    _str,       // a string
     symbol,     // [](){}|+-*/&&|| etc
     null        // placeholder value
 };
@@ -28,7 +28,6 @@ struct Token {
 std::string repr(const TokenType &t);
 std::ostream &operator<<(std::ostream &os, const TokenType &t);
 std::ostream &operator<<(std::ostream &os, const Token &token);
-
 
 }
 

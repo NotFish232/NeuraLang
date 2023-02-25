@@ -5,45 +5,43 @@ using namespace llvm;
 
 namespace nl {
 
-FunctionAST::FunctionAST(FunctionSignatureAST signature, BlockAST body): m_signature(signature) {
-    m_body = body;
+FunctionAST::FunctionAST(FunctionSignatureAST signature, vector<NodeAST> content): 
+m_signature(signature), m_content(content) {
 }
 
 FunctionAST::~FunctionAST() {
-
 }
 
 const FunctionSignatureAST &FunctionAST::get_signature() const {
     return m_signature;
 }
 
-const BlockAST &FunctionAST::get_body() const {
-    return m_body;
-}  
-
-Function *FunctionAST::make_IR() const {
-    Function *function = m_signature.make_IR();
-
-    if (!function)
-        return nullptr;
-
-    /*BasicBlock *block = BasicBlock::Create(*ctx, "entry", function);
-    builder->SetInsertPoint(block);
-    values.clear();
-
-    for (auto &Arg : function->args()) {
-        values[Arg.getName().data()] = &Arg;
-    }
-
-    if (Value *returnedValue = m_body->codegen()) {
-        builder->CreateRet(returnedValue);
-        verifyFunction(*function);
-
-        return function;
-    }
-
-    function->eraseFromParent();*/
-    return nullptr;
+const vector<NodeAST> &FunctionAST::get_content() const {
+    return m_content;
 }
 
+Function *FunctionAST::make_IR(ValueMap &scope) const {
+    ValueMap function_scope(scope);
+    Function *function = m_signature.make_IR(function_scope);
+
+    BasicBlock *block = BasicBlock::Create(*ctx, "func", function);
+    builder->SetInsertPoint(block);
+
+    if (m_content.size() != 0) {
+        for (size_t i = 0; i < m_content.size() - 1; ++i) {
+            builder->Insert(m_content[i].make_IR(function_scope));
+        }
+        builder->CreateRet(m_content.back().make_IR(function_scope));
+    } else {
+        builder->CreateRetVoid();
+    }
+
+    function_scope.clear();
+
+    scope[m_signature.get_name()] = function;
+
+    return function;
+
+    return function;
+}
 }

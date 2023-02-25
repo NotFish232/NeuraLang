@@ -26,9 +26,9 @@ const string &BooleanExpressionAST::get_operator() const {
     return m_operator;
 }
 
-Value *BooleanExpressionAST::make_IR() const {
-    Value *left_IR = m_left.make_IR();
-    Value *right_IR = m_right.make_IR();
+Value *BooleanExpressionAST::make_IR(ValueMap &scope) const {
+    Value *left_IR = m_left.make_IR(scope);
+    Value *right_IR = m_right.make_IR(scope);
 
     if (!left_IR || !right_IR) {
         return nullptr;

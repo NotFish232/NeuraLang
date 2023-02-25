@@ -9,7 +9,7 @@ NodeAST::~NodeAST() {
 
 }
 
-Value *NodeAST::make_IR() const {
+Value *NodeAST::make_IR(ValueMap &scope) const {
 
 }
 

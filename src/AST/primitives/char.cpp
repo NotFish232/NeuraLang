@@ -7,9 +7,9 @@ namespace nl {
 
 const size_t CharAST::default_num_bits = 8;
 
-CharAST::CharAST(const string &value, size_t numBits) {
+CharAST::CharAST(const string &value, size_t num_bits) {
     m_value = value;
-    m_numBits = numBits;
+    m_num_bits = m_num_bits;
 }
 
 CharAST::~CharAST() {
@@ -19,8 +19,8 @@ const string &CharAST::get_value() const {
     return m_value;
 }
 
-Value *CharAST::make_IR() const {
-    return ConstantInt::get(*ctx, APInt(m_numBits, m_value, 10));
+Value *CharAST::make_IR(ValueMap &scope) const {
+    return ConstantInt::get(*ctx, APInt(m_num_bits, m_value, 10));
 }
 
 }

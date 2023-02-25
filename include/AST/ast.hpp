@@ -6,7 +6,6 @@
 #include "primitives/string.hpp"
 
 #include "binary_operation.hpp"
-#include "block.hpp"
 #include "boolean_expression.hpp"
 #include "call_expression.hpp"
 #include "function_signature.hpp"

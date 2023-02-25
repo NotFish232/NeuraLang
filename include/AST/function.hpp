@@ -2,22 +2,21 @@
 #define FUNCTION_HPP
 
 #include "node.hpp"
-#include "block.hpp"
 #include "function_signature.hpp"
 
 namespace nl {
 
 class FunctionAST: public NodeAST {
     FunctionSignatureAST m_signature;
-    BlockAST m_body;
+    std::vector<NodeAST> &m_content;
 
 public:
-    FunctionAST(FunctionSignatureAST signature, BlockAST body);
+    FunctionAST(FunctionSignatureAST signature, std::vector<NodeAST> content);
     ~FunctionAST();
 
     const FunctionSignatureAST &get_signature() const;
-    const BlockAST &get_body() const;
-    llvm::Function *make_IR() const override;
+    const std::vector<NodeAST> &get_content() const;
+    llvm::Function *make_IR(ValueMap &scope) const override;
 };
 
 }

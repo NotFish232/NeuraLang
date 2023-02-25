@@ -16,8 +16,8 @@ public:
     VariableAST(const std::string &name, llvm::Type *type);
     ~VariableAST();
     const std::string &get_name() const;
-    const llvm::Type *const &get_type() const;
-    llvm::Value *make_IR() const override;
+    llvm::Type *get_type() const;
+    llvm::Value *make_IR(ValueMap &scope) const override;
 };
 
 }

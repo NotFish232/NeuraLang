@@ -17,7 +17,7 @@ public:
     const NodeAST &get_left() const;
     const NodeAST &get_right() const;
     const std::string &get_operator() const;
-    llvm::Value *make_IR() const override;
+    llvm::Value *make_IR(ValueMap &scope) const override;
 };
 
 }

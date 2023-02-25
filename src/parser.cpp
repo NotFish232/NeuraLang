@@ -5,36 +5,32 @@ using namespace llvm;
 
 namespace nl {
 
-// clang-format off
-const map<string, int> Parser::binary_operator_precedence = {
-    {"+", 1},
-    {"-", 1},
-    {"*", 2},
-    {"/", 2},
-    {"^", 3},
-    {"%", 3}
-};
-// clang-format on
-
 Parser::Parser(const string &filename) {
-    m_fileHandler = fstream(filename, ios::in);
-    if (!m_fileHandler.good()) {
+    m_file_handle = fstream(filename, ios::in);
+    if (!m_file_handle.good()) {
         throw new runtime_error("Could not open file \"" + filename + "\"");
     }
-    m_lexer.set_stream(m_fileHandler);
+    m_lexer.set_stream(m_file_handle);
+    make_main_function();
+    cout << "here \n";
 }
 
 Parser::~Parser() {
+}
+
+FunctionAST Parser::make_main_function() {
+    FunctionSignatureAST func_sig("main", vector<VariableAST>(), Type::getInt32Ty(*ctx));
+    FunctionAST function(func_sig, vector<NodeAST>());
+    function.make_IR(m_global_scope)->dump();
 }
 
 Type *Parser::parse_type_expression() {
     Token type_str = m_lexer.get_next();
     assert(type_str);
 
-    if (type_str.value == "i") { // next token should be int
-        Token num = m_lexer.get_next();
-        assert(all_of(num.value.begin(), num.value.end(), ::isdigit));
-        type_str.value += num.value;
+    // e.g. int:64:s or int:64:128:32:u
+    vector<string> flags;
+    while (m_lexer.peek_next().value == ":") {
     }
 
     if (type_str.value == "float") {
@@ -51,7 +47,7 @@ Type *Parser::parse_type_expression() {
     }
 }
 
-BlockAST Parser::parse_block_expression() {
+vector<NodeAST> Parser::parse_block_expression() {
     if (m_lexer.peek_next().value == "{") {
         return parse_bracket_block_expression();
     } else {
@@ -59,14 +55,19 @@ BlockAST Parser::parse_block_expression() {
     }
 }
 
-BlockAST Parser::parse_bracket_block_expression() {
+vector<NodeAST> Parser::parse_bracket_block_expression() {
     assert(m_lexer.get_next().value == "{"); // eats bracket
-
-
 }
 
-BlockAST Parser::parse_single_line_block_expression() {
+vector<NodeAST> Parser::parse_single_line_block_expression() {
 }
+
+NodeAST Parser::parse_declaration() {
+}
+
+NodeAST Parser::parse_variable_expression() {
+}
+
 FunctionAST Parser::parse_function_expression() {
     // eat def keyword
     // and get next token which is func name
@@ -103,7 +104,7 @@ FunctionAST Parser::parse_function_expression() {
 
     FunctionSignatureAST func_sig(function_name.value, args, return_type);
 
-    BlockAST body = parse_block_expression();
+    vector<NodeAST> body = parse_block_expression();
 
     return FunctionAST(func_sig, body);
 }
@@ -118,33 +119,35 @@ IfExpressionAST Parser::parse_if_expression() {
 }
 
 NodeAST Parser::parse_expression() {
-    size_t line_num = m_lexer.peek_next().line_num;
+    Token tok = m_lexer.peek_next();
+
+    cout << tok << '\n';
+
+    if (tok.type == TokenType::keyword) {
+        if (tok.value == "for") {
+            parse_for_expression();
+        } else if (tok.value == "while") {
+            parse_while_expression();
+        } else if (tok.value == "if") {
+            parse_if_expression();
+        } else {
+            cout << "Unrecognized keyword \"" << tok.value << "\"\n";
+        }
+    } else {
+        if (core_types.find(tok.value) != core_types.end()) {
+            parse_declaration();
+        } else {
+            cout << "error unrecognized expression \n";
+        }
+    }
 }
 
 void Parser::generate_IR() {
-    cout << "here \n";
+    make_main_function();
+    return;
     m_lexer.parse_tokens();
-    cout << "here \n";
     while (m_lexer.has_next()) {
-        Token tok = m_lexer.get_next();
-        cout << tok << '\n';
-
-        if (tok.type == TokenType::keyword) {
-            if (tok.value == "def") {
-                parse_function_expression();
-                cout << "Finished parsing a function declaration \n";
-            } else if (tok.value == "for") {
-                parse_for_expression();
-            } else if (tok.value == "while") {
-                parse_while_expression();
-            } else if (tok.value == "if") {
-                parse_if_expression();
-            } else {
-                cout << "Unrecognized keyword \"" << tok.value << "\"\n";
-            }
-        } else {
-            parse_expression();
-        }
+        parse_expression();
     }
 }
 }

@@ -12,7 +12,7 @@ namespace nl {
 FunctionSignatureAST::FunctionSignatureAST(const string &name, const vector<VariableAST> &args, Type *return_type) {
     m_name = name;
     m_args = args;
-    m_return_type =  return_type;
+    m_return_type = return_type;
 }
 
 const string &FunctionSignatureAST::get_name() const {
@@ -27,18 +27,24 @@ const Type *const &FunctionSignatureAST::get_return_type() const {
     return m_return_type;
 }
 
-Function *FunctionSignatureAST::make_IR() const {
-    /*vector<Type *> Doubles(m_args.size(), Type::getDoubleTy(*ctx));
-    FunctionType *FT = FunctionType::get(Type::getDoubleTy(*ctx), Doubles, false);
-    Function *F = Function::Create(FT, Function::ExternalLinkage, m_name, mod.get());
-
-    size_t i = 0;
-    for (auto &arg : F->args()) {
-        arg.setName(m_args[i++]);
+Function *FunctionSignatureAST::make_IR(ValueMap &scope) const {
+    vector<Type *> arg_types;
+    for (const auto &arg : m_args) {
+        arg_types.push_back(arg.get_type());
     }
 
-    return F;*/
-    return nullptr;
+    FunctionType *ft = FunctionType::get(m_return_type, arg_types, false);
+
+    Function *f = Function::Create(ft, Function::ExternalLinkage, m_name, *mod);
+
+    size_t i = 0;
+    for (auto &arg : f->args()) {
+        string name = m_args[i++].get_name();
+        arg.setName(name);
+        scope[name] = &arg;
+    }
+
+    return f;
 }
 
 }
