@@ -11,8 +11,8 @@ Parser::Parser(const string &filename) {
         throw new runtime_error("Could not open file \"" + filename + "\"");
     }
     m_lexer.set_stream(m_file_handle);
-    make_main_function();
-    cout << "here \n";
+    make_main_function().make_IR(m_global_scope)->dump();
+    cout << "hi \n";
 }
 
 Parser::~Parser() {
@@ -21,7 +21,7 @@ Parser::~Parser() {
 FunctionAST Parser::make_main_function() {
     FunctionSignatureAST func_sig("main", vector<VariableAST>(), Type::getInt32Ty(*ctx));
     FunctionAST function(func_sig, vector<NodeAST>());
-    function.make_IR(m_global_scope)->dump();
+    return function;
 }
 
 Type *Parser::parse_type_expression() {

@@ -8,7 +8,7 @@ namespace nl {
 
 class FunctionAST: public NodeAST {
     FunctionSignatureAST m_signature;
-    std::vector<NodeAST> &m_content;
+    std::vector<NodeAST> m_content;
 
 public:
     FunctionAST(FunctionSignatureAST signature, std::vector<NodeAST> content);

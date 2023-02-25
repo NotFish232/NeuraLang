@@ -21,6 +21,7 @@ namespace nl {
 class Parser {
 private:
     ValueMap m_global_scope;
+    NodeAST d;
 
     std::fstream m_file_handle;
     Lexer m_lexer;
