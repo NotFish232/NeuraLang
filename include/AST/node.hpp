@@ -14,7 +14,7 @@ using ValueMap = std::map<std::string, llvm::Value *>;
 class NodeAST {
 public:
     // a null value that can be returned from functions that require a &, same thing as in token
-    static const std::unique_ptr<NodeAST> null;
+    static std::unique_ptr<NodeAST> null;
 
     virtual ~NodeAST();
     virtual llvm::Value *make_IR(ValueMap &scope) const;

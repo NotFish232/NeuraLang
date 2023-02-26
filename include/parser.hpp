@@ -24,7 +24,8 @@ private:
     Lexer m_lexer;
 
     ValueMap m_global_scope;
-    std::vector<std::unique_ptr<NodeAST>> m_main_body;
+
+    std::vector<std::unique_ptr<NodeAST>> m_ast;
 
     std::unique_ptr<FunctionAST> make_main_function();
 
@@ -39,14 +40,16 @@ private:
      */
     std::unique_ptr<NodeAST> parse_declaration();
 
-    std::unique_ptr<FunctionAST> parse_function_expression();
-    std::unique_ptr<NodeAST> parse_variable_expression();
+    std::unique_ptr<FunctionAST> parse_function_declaration(llvm::Type *type, const std::string &identifier);
+    std::unique_ptr<NodeAST> parse_variable_declaration(llvm::Type *return_type, const std::string &identifier);
 
     std::unique_ptr<ForLoopAST> parse_for_expression();
     std::unique_ptr<WhileLoopAST> parse_while_expression();
 
-    std::unique_ptr<IfExpressionAST> parse_if_expression();
+    std::unique_ptr<IfStatementAST> parse_if_expression();
     std::unique_ptr<NodeAST> parse_expression();
+
+    void build_AST();
 
 public:
     Parser(const std::string &filename);

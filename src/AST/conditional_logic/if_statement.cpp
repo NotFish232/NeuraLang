@@ -1,11 +1,11 @@
-#include "../../../include/AST/conditional_logic/if_expression.hpp"
+#include "../../../include/AST/conditional_logic/if_statement.hpp"
 
 using namespace std;
 using namespace llvm;
 
 namespace nl {
 
-IfExpressionAST::IfExpressionAST(unique_ptr<BooleanExpressionAST> &condition,
+IfStatementAST::IfStatementAST(unique_ptr<BooleanExpressionAST> &condition,
                                  vector<unique_ptr<NodeAST>> &then_block,
                                  vector<unique_ptr<NodeAST>> &else_block) {
     m_condition = move(condition);
@@ -13,10 +13,10 @@ IfExpressionAST::IfExpressionAST(unique_ptr<BooleanExpressionAST> &condition,
     m_else = move(else_block);
 }
 
-IfExpressionAST::~IfExpressionAST() {
+IfStatementAST::~IfStatementAST() {
 }
 
-Value *IfExpressionAST::make_IR(ValueMap &scope) const {
+Value *IfStatementAST::make_IR(ValueMap &scope) const {
     /*
     Value *condition = m_condition->codegen();
     if (!condition) return nullptr;

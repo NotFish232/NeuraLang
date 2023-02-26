@@ -6,8 +6,9 @@ using namespace nl;
 using namespace llvm;
 
 int main(int argc, char **argv) {
+
     string filename = "examples/functions.nl";
-    string outfile = "out.ll";
+    
     Parser parser(filename);
 
     parser.generate_IR();

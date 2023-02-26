@@ -6,7 +6,7 @@
 #include "primitives/string.hpp"
 
 #include "conditional_logic/boolean_expression.hpp"
-#include "conditional_logic/if_expression.hpp"
+#include "conditional_logic/if_statement.hpp"
 
 #include "functions/call_expression.hpp"
 #include "functions/function.hpp"

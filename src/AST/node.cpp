@@ -5,7 +5,7 @@ using namespace llvm;
 
 namespace nl {
 
-const unique_ptr<NodeAST> NodeAST::null = make_unique<NodeAST>();
+unique_ptr<NodeAST> NodeAST::null = make_unique<NodeAST>();
 
 NodeAST::~NodeAST() {
 
