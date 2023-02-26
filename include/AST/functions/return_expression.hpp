@@ -1,7 +1,7 @@
 #ifndef RETURNEXPRESSION_HPP
 #define RETURNEXPRESSION_HPP
 
-#include "node.hpp"
+#include "../node.hpp"
 
 namespace nl {
 

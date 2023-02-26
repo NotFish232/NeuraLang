@@ -2,7 +2,7 @@
 #define FUNCTION_HPP
 
 #include "function_signature.hpp"
-#include "node.hpp"
+#include "../node.hpp"
 #include "return_expression.hpp"
 
 namespace nl {

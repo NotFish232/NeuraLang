@@ -2,7 +2,7 @@
 #define IFEXPRESSION_HPP
 
 #include "boolean_expression.hpp"
-#include "node.hpp"
+#include "../node.hpp"
 
 namespace nl {
 

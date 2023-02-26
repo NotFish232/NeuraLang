@@ -20,13 +20,11 @@ namespace nl {
 
 class Parser {
 private:
-    ValueMap m_global_scope;
-    NodeAST d;
-
     std::fstream m_file_handle;
     Lexer m_lexer;
 
-    std::vector<std::string> m_errors;
+    ValueMap m_global_scope;
+    std::vector<std::unique_ptr<NodeAST>> m_main_body;
 
     std::unique_ptr<FunctionAST> make_main_function();
 
@@ -44,8 +42,9 @@ private:
     std::unique_ptr<FunctionAST> parse_function_expression();
     std::unique_ptr<NodeAST> parse_variable_expression();
 
-    void parse_for_expression();
-    void parse_while_expression();
+    std::unique_ptr<ForLoopAST> parse_for_expression();
+    std::unique_ptr<WhileLoopAST> parse_while_expression();
+
     std::unique_ptr<IfExpressionAST> parse_if_expression();
     std::unique_ptr<NodeAST> parse_expression();
 

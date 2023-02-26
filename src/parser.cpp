@@ -12,7 +12,6 @@ Parser::Parser(const string &filename) {
     }
     m_lexer.set_stream(m_file_handle);
     make_main_function()->make_IR(m_global_scope)->dump();
-    cout << "hi \n";
 }
 
 Parser::~Parser() {
@@ -128,10 +127,10 @@ unique_ptr<FunctionAST> Parser::parse_function_expression() {/*
     return make_unique<FunctionAST>(func_sig, body);*/
 }
 
-void Parser::parse_for_expression() {
+unique_ptr<ForLoopAST> Parser::parse_for_expression() {
 }
 
-void Parser::parse_while_expression() {
+unique_ptr<WhileLoopAST> Parser::parse_while_expression() {
 }
 
 unique_ptr<IfExpressionAST> Parser::parse_if_expression() {
@@ -162,9 +161,8 @@ unique_ptr<NodeAST> Parser::parse_expression() {
 }
 
 void Parser::generate_IR() {
-    make_main_function();
-    return;
     m_lexer.parse_tokens();
+
     while (m_lexer.has_next()) {
         parse_expression();
     }

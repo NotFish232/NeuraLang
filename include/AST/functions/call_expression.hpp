@@ -5,8 +5,8 @@
 #ifndef CALLEXPRAST_HPP
 #define CALLEXPRAST_HPP
 
-#include "node.hpp"
-#include "variable.hpp"
+#include "../node.hpp"
+#include "../variables/variable.hpp"
 
 namespace nl {
 

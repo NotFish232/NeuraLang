@@ -1,7 +1,7 @@
 #ifndef BOOLEANOPERATION_HPP
 #define BOOLEANOPERATION_HPP
 
-#include "node.hpp"
+#include "../node.hpp"
 
 // syntax tree for boolean expression
 

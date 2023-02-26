@@ -1,7 +1,7 @@
 #ifndef BINARYOPERATION_HPP
 #define BINARYOPERATION_HPP
 
-#include "node.hpp"
+#include "../node.hpp"
 
 // syntax tree for binary i.e. 1 + 2
 

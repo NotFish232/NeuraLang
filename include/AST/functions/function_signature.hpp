@@ -2,8 +2,8 @@
 #ifndef FUNCTIONSIGNATUREAST_HPP
 #define FUNCTIONSIGNATUREAST_HPP
 
-#include "node.hpp"
-#include "variable.hpp"
+#include "../node.hpp"
+#include "../variables/variable.hpp"
 
 namespace nl {
 

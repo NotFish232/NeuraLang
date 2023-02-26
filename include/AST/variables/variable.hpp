@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "node.hpp"
+#include "../node.hpp"
 
 // syntax tree for variables
 namespace nl {
@@ -11,9 +11,11 @@ namespace nl {
 class VariableAST : public NodeAST {
     std::string m_name;
     llvm::Type *m_type;
+    
 
 public:
-    VariableAST(const std::string &name, llvm::Type *type);
+    VariableAST(const std::string &name,
+                llvm::Type *type);
     ~VariableAST();
     const std::string &get_name() const;
     llvm::Type *get_type() const;

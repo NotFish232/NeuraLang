@@ -5,13 +5,20 @@
 #include "primitives/number.hpp"
 #include "primitives/string.hpp"
 
-#include "binary_operation.hpp"
-#include "boolean_expression.hpp"
-#include "call_expression.hpp"
-#include "function.hpp"
-#include "function_signature.hpp"
-#include "if_expression.hpp"
-#include "return_expression.hpp"
-#include "variable.hpp"
+#include "conditional_logic/boolean_expression.hpp"
+#include "conditional_logic/if_expression.hpp"
+
+#include "functions/call_expression.hpp"
+#include "functions/function.hpp"
+#include "functions/function_signature.hpp"
+#include "functions/return_expression.hpp"
+
+#include "loops/for_loop.hpp"
+#include "loops/while_loop.hpp"
+
+#include "variables/assignment_expression.hpp"
+#include "variables/variable.hpp"
+
+#include "operations/binary_operation.hpp"
 
 #endif
