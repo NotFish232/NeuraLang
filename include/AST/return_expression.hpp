@@ -7,10 +7,10 @@ namespace nl {
 
 class ReturnExpressionAST : public NodeAST {
 private:
-    NodeAST m_return_value;
+    std::unique_ptr<NodeAST> m_return_value;
 
 public:
-    ReturnExpressionAST(NodeAST return_value);
+    ReturnExpressionAST(std::unique_ptr<NodeAST> &return_value);
     ~ReturnExpressionAST();
     llvm::Value *make_IR(ValueMap &scope) const override;
 };

@@ -28,26 +28,26 @@ private:
 
     std::vector<std::string> m_errors;
 
-    FunctionAST make_main_function();
+    std::unique_ptr<FunctionAST> make_main_function();
 
     llvm::Type *parse_type_expression();
 
-    std::vector<NodeAST> parse_block_expression();
-    std::vector<NodeAST> parse_bracket_block_expression();
-    std::vector<NodeAST> parse_single_line_block_expression();
+    std::vector<std::unique_ptr<NodeAST>> parse_block_expression();
+    std::vector<std::unique_ptr<NodeAST>> parse_bracket_block_expression();
+    std::vector<std::unique_ptr<NodeAST>> parse_single_line_block_expression();
 
     /**
      * @note declaration is either a function or variable declaration
      */
-    NodeAST parse_declaration();
+    std::unique_ptr<NodeAST> parse_declaration();
 
-    FunctionAST parse_function_expression();
-    NodeAST parse_variable_expression();
+    std::unique_ptr<FunctionAST> parse_function_expression();
+    std::unique_ptr<NodeAST> parse_variable_expression();
 
     void parse_for_expression();
     void parse_while_expression();
-    IfExpressionAST parse_if_expression();
-    NodeAST parse_expression();
+    std::unique_ptr<IfExpressionAST> parse_if_expression();
+    std::unique_ptr<NodeAST> parse_expression();
 
 public:
     Parser(const std::string &filename);

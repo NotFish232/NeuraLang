@@ -7,7 +7,6 @@
 #include <map>
 
 using ValueMap = std::map<std::string, llvm::Value *>;
-
 namespace nl {
 
 // base class for all

@@ -7,13 +7,13 @@
 namespace nl {
 
 class IfExpressionAST : public NodeAST {
-    BooleanExpressionAST m_condition;
-    std::vector<NodeAST> m_then, m_else;
+    std::unique_ptr<BooleanExpressionAST> m_condition;
+    std::vector<std::unique_ptr<NodeAST>> m_then, m_else;
 
 public:
-    IfExpressionAST(BooleanExpressionAST condition,
-                    std::vector<NodeAST> then_block,
-                    std::vector<NodeAST> else_block);
+    IfExpressionAST(std::unique_ptr<BooleanExpressionAST> &condition,
+                    std::vector<std::unique_ptr<NodeAST>> &then_block,
+                    std::vector<std::unique_ptr<NodeAST>> &else_block);
     ~IfExpressionAST();
 
     llvm::Value *make_IR(ValueMap &scope) const override;

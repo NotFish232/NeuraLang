@@ -6,9 +6,6 @@ using namespace nl;
 using namespace llvm;
 
 int main(int argc, char **argv) {
-    map<string, Value*> m;
-    NumberAST("").make_IR(m);
-    ReturnExpressionAST(NumberAST("")).make_IR(m); return 0;
 
     // NodeAST * thing = new ReturnExpressionAST(NumberAST(""));
 

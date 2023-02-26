@@ -13,13 +13,14 @@ namespace nl {
 // function calls syntax tree
 class CallExpressionAST : public NodeAST {
     std::string m_func_name;
-    std::vector<NodeAST> m_args;
+    std::vector<std::unique_ptr<NodeAST>> m_args;
 
 public:
-    CallExpressionAST(const std::string &func_name, const std::vector<NodeAST> &args);
+    CallExpressionAST(const std::string &func_name,
+                      std::vector<std::unique_ptr<NodeAST>> &args);
     ~CallExpressionAST();
     const std::string &get_func_name() const;
-    const std::vector<NodeAST> &get_args() const;
+    const std::vector<std::unique_ptr<NodeAST>> &get_args() const;
     llvm::Value *make_IR(ValueMap &scope) const override;
 };
 

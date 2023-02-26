@@ -1,22 +1,23 @@
 #ifndef FUNCTION_HPP
 #define FUNCTION_HPP
 
-#include "node.hpp"
 #include "function_signature.hpp"
+#include "node.hpp"
 #include "return_expression.hpp"
 
 namespace nl {
 
-class FunctionAST: public NodeAST {
-    FunctionSignatureAST m_signature;
-    std::vector<NodeAST> m_content;
+class FunctionAST : public NodeAST {
+    std::unique_ptr<FunctionSignatureAST> m_signature;
+    std::vector<std::unique_ptr<NodeAST>> m_content;
 
 public:
-    FunctionAST(FunctionSignatureAST signature, std::vector<NodeAST> content);
+    FunctionAST(std::unique_ptr<FunctionSignatureAST> &signature,
+                std::vector<std::unique_ptr<NodeAST>> &content);
     ~FunctionAST();
 
-    const FunctionSignatureAST &get_signature() const;
-    const std::vector<NodeAST> &get_content() const;
+    const std::unique_ptr<FunctionSignatureAST> &get_signature() const;
+    const std::vector<std::unique_ptr<NodeAST>> &get_content() const;
     llvm::Function *make_IR(ValueMap &scope) const override;
 };
 

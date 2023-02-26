@@ -9,9 +9,11 @@ using namespace llvm;
 
 namespace nl {
 
-FunctionSignatureAST::FunctionSignatureAST(const string &name, const vector<VariableAST> &args, Type *return_type) {
+FunctionSignatureAST::FunctionSignatureAST(const string &name,
+                                           vector<unique_ptr<VariableAST>> &args,
+                                           Type *return_type) {
     m_name = name;
-    m_args = args;
+    m_args = move(args);
     m_return_type = return_type;
 }
 
@@ -19,7 +21,7 @@ const string &FunctionSignatureAST::get_name() const {
     return m_name;
 }
 
-const vector<VariableAST> &FunctionSignatureAST::get_args() const {
+const vector<unique_ptr<VariableAST>> &FunctionSignatureAST::get_args() const {
     return m_args;
 }
 
@@ -30,7 +32,7 @@ const Type *const &FunctionSignatureAST::get_return_type() const {
 Function *FunctionSignatureAST::make_IR(ValueMap &scope) const {
     vector<Type *> arg_types;
     for (const auto &arg : m_args) {
-        arg_types.push_back(arg.get_type());
+        arg_types.push_back(arg->get_type());
     }
 
     FunctionType *ft = FunctionType::get(m_return_type, arg_types, false);
@@ -39,7 +41,7 @@ Function *FunctionSignatureAST::make_IR(ValueMap &scope) const {
 
     size_t i = 0;
     for (auto &arg : f->args()) {
-        string name = m_args[i++].get_name();
+        string name = m_args[i++]->get_name();
         arg.setName(name);
         scope[name] = &arg;
     }

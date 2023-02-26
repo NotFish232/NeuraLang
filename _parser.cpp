@@ -9,18 +9,20 @@ using namespace llvm;
 
 // for binary operations
 std::map<char, int> binopPrecedence = {
-    {'<', 10},
-    {'+', 20},
-    {'-', 20},
-    {'*', 40}
+    { '<', 10 },
+    { '+', 20 },
+    { '-', 20 },
+    { '*', 40 }
 };
 
-Parser::Parser(const string &filename) {
+Parser::Parser(const string& filename)
+{
     m_fileHandler = ifstream(filename, ios::in);
     m_lexer.set_stream(m_fileHandler);
 }
 
-void Parser::parse() {
+void Parser::parse()
+{
     m_lexer.get_next_token();
     while (m_lexer.get_curr_token().type != TokenType::_eof) {
         switch (m_lexer.get_curr_token().type) {
@@ -38,7 +40,8 @@ void Parser::parse() {
 }
 
 // begin tree parsing
-unique_ptr<ExprAST> Parser::parsePrimary() {
+unique_ptr<ExprAST> Parser::parsePrimary()
+{
     Token currentToken = m_lexer.get_curr_token();
     switch (currentToken.type) {
     case TokenType::_identifier:
@@ -58,16 +61,16 @@ unique_ptr<ExprAST> Parser::parsePrimary() {
 }
 
 // parenth parse
-unique_ptr<ExprAST> Parser::parseParenExpr() {
+unique_ptr<ExprAST> Parser::parseParenExpr()
+{
     // set next token in buffer
     m_lexer.get_next_token();
 
     auto expression = parseExpression();
 
-    if (!expression){
+    if (!expression) {
         return nullptr;
     }
-
 
     if (m_lexer.get_curr_token().type != TokenType::_rightParen) {
         logger.error("expected )");
@@ -80,10 +83,10 @@ unique_ptr<ExprAST> Parser::parseParenExpr() {
 }
 
 // expressions
-unique_ptr<ExprAST> Parser::parseIdentifierExpr() {
+unique_ptr<ExprAST> Parser::parseIdentifierExpr()
+{
     string id = m_lexer.get_curr_token().identifier;
     m_lexer.get_next_token(); // eat
-
 
     if (m_lexer.get_curr_token().identifier != "(")
         return std::make_unique<VariableExprAST>(id);
@@ -116,36 +119,41 @@ unique_ptr<ExprAST> Parser::parseIdentifierExpr() {
 }
 
 // parse number
-unique_ptr<ExprAST> Parser::parseNumberExpr() {
+unique_ptr<ExprAST> Parser::parseNumberExpr()
+{
     auto Result = make_unique<NumericExprAST>(m_lexer.get_curr_token().numVal);
     m_lexer.get_next_token();
     return std::move(Result);
 }
 
-unique_ptr<ExprAST> Parser::parseStringExpr() {
+unique_ptr<ExprAST> Parser::parseStringExpr()
+{
     auto result = make_unique<StringExprAST>(m_lexer.get_curr_token().identifier);
     m_lexer.get_next_token();
     return std::move(result);
 }
 
-int Parser::getTokenPrecedence() const {
+int Parser::getTokenPrecedence() const
+{
     Token curTok = m_lexer.get_curr_token();
-  if (!isascii(curTok.identifier[0])) {
-    return -1;
-  }
+    if (!isascii(curTok.identifier[0])) {
+        return -1;
+    }
 
-  int TokPrec = binopPrecedence[curTok.identifier[0]];
-  if (TokPrec <= 0) return -1;
+    int TokPrec = binopPrecedence[curTok.identifier[0]];
+    if (TokPrec <= 0)
+        return -1;
 
-  return TokPrec;
+    return TokPrec;
 }
 
 // parse binary operations
-unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, unique_ptr<ExprAST> LHS) {
+unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, unique_ptr<ExprAST> LHS)
+{
     // sorry again
     while (true) {
         int tokenPrecedence = getTokenPrecedence();
-        if (tokenPrecedence < expressionPrecedence){
+        if (tokenPrecedence < expressionPrecedence) {
             return LHS;
         }
 
@@ -153,14 +161,14 @@ unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, un
         m_lexer.get_next_token(); // eat
 
         auto RHS = parsePrimary();
-        if (!RHS){
+        if (!RHS) {
             return nullptr;
         }
 
         int nextPrecedence = getTokenPrecedence();
         if (tokenPrecedence < nextPrecedence) {
             RHS = parseBinaryOperationRHS(++tokenPrecedence, std::move(RHS));
-            if (!RHS){
+            if (!RHS) {
                 return nullptr;
             }
         }
@@ -171,15 +179,18 @@ unique_ptr<ExprAST> Parser::parseBinaryOperationRHS(int expressionPrecedence, un
 }
 
 // expression parsing
-unique_ptr<ExprAST> Parser::parseExpression() {
+unique_ptr<ExprAST> Parser::parseExpression()
+{
     auto LHS = parsePrimary();
-    if (!LHS) return nullptr;
+    if (!LHS)
+        return nullptr;
 
     return parseBinaryOperationRHS(0, std::move(LHS));
 }
 
 // parse the function sig
-unique_ptr<PrototypeAST> Parser::parsePrototype() {
+unique_ptr<PrototypeAST> Parser::parsePrototype()
+{
     logger.note("Reached prototype.");
 
     // this section grabs the function name
@@ -219,11 +230,13 @@ unique_ptr<PrototypeAST> Parser::parsePrototype() {
     return make_unique<PrototypeAST>(functionName, std::move(argumentNames));
 }
 
-unique_ptr<FunctionAST> Parser::parseDefinition() {
+unique_ptr<FunctionAST> Parser::parseDefinition()
+{
     m_lexer.get_next_token();
 
     auto prototype = parsePrototype();
-    if (!prototype) return nullptr; // check if the prototype is valid
+    if (!prototype)
+        return nullptr; // check if the prototype is valid
     logger.note("Valid Prototype.");
 
     if (auto expression = parseExpression()) {
@@ -233,7 +246,8 @@ unique_ptr<FunctionAST> Parser::parseDefinition() {
     return nullptr;
 }
 
-unique_ptr<FunctionAST> Parser::parseTopLevelExpr() {
+unique_ptr<FunctionAST> Parser::parseTopLevelExpr()
+{
     if (auto expression = parseExpression()) {
         auto prototype = make_unique<PrototypeAST>("__anon_expr", vector<string>());
         return make_unique<FunctionAST>(std::move(prototype), std::move(expression));
@@ -242,44 +256,46 @@ unique_ptr<FunctionAST> Parser::parseTopLevelExpr() {
     return nullptr;
 }
 
-std::unique_ptr<PrototypeAST> Parser::parseExtern() {
+std::unique_ptr<PrototypeAST> Parser::parseExtern()
+{
     m_lexer.get_next_token();
     return parsePrototype();
 }
 
-std::unique_ptr<IfExprAST> Parser::parseIfExpr(){
-    //eat the if statement
+std::unique_ptr<IfExprAST> Parser::parseIfExpr()
+{
+    // eat the if statement
     m_lexer.get_next_token();
 
-    //condition
+    // condition
     auto condition = parseExpression();
-    if(!condition) {
+    if (!condition) {
         logger.error("invalid (if) condition");
         return nullptr;
     }
     logger.note("reached/passed if");
 
-    if(m_lexer.get_curr_token().type != TokenType::_then) {
+    if (m_lexer.get_curr_token().type != TokenType::_then) {
         logger.error("expected then statement");
         return nullptr;
     }
     m_lexer.get_next_token();
 
     auto then = parseExpression();
-    if(!condition) {
+    if (!condition) {
         logger.error("invalid then condition");
         return nullptr;
     }
     logger.note("reached/passed then");
 
-    if(m_lexer.get_curr_token().type != TokenType::_else) {
+    if (m_lexer.get_curr_token().type != TokenType::_else) {
         logger.error("expected else statement");
         return nullptr;
     }
-    m_lexer.get_next_token(); //eat the else
+    m_lexer.get_next_token(); // eat the else
 
     auto _else = parseExpression();
-    if(!_else) {
+    if (!_else) {
         logger.error("invalid else condition");
         return nullptr;
     }
@@ -287,10 +303,11 @@ std::unique_ptr<IfExprAST> Parser::parseIfExpr(){
     return std::make_unique<IfExprAST>(std::move(condition), std::move(then), std::move(_else));
 }
 
-void Parser::handleDefinition() {
+void Parser::handleDefinition()
+{
     logger.note("Reached definition.");
     if (auto FnAST = parseDefinition()) {
-        if (auto *FnIR = FnAST->codegen()) {
+        if (auto* FnIR = FnAST->codegen()) {
             fprintf(stderr, "read function definition:");
             FnIR->print(errs());
             fprintf(stderr, "\n");
@@ -300,9 +317,10 @@ void Parser::handleDefinition() {
     }
 }
 
-void Parser::handleExtern() {
+void Parser::handleExtern()
+{
     if (auto ProtoAST = parseExtern()) {
-        if (auto *FnIR = ProtoAST->codegen()) {
+        if (auto* FnIR = ProtoAST->codegen()) {
             fprintf(stderr, "read extern:");
             // FnIR->print(errs());
             fprintf(stderr, "\n");
@@ -312,9 +330,10 @@ void Parser::handleExtern() {
     }
 }
 
-void Parser::handleTopLevelExpression() {
+void Parser::handleTopLevelExpression()
+{
     if (auto FnAST = parseTopLevelExpr()) {
-        if (auto *FnIR = FnAST->codegen()) {
+        if (auto* FnIR = FnAST->codegen()) {
             fprintf(stderr, "read top-level expression:");
             FnIR->print(errs());
             fprintf(stderr, "\n");

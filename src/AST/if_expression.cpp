@@ -5,16 +5,16 @@ using namespace llvm;
 
 namespace nl {
 
-IfExpressionAST::IfExpressionAST(BooleanExpressionAST condition, vector<NodeAST> then_block, vector<NodeAST> else_block):
-m_condition(condition) {
-        m_then = then_block;
-        m_else = else_block;
-    }
-
-IfExpressionAST::~IfExpressionAST() {
-
+IfExpressionAST::IfExpressionAST(unique_ptr<BooleanExpressionAST> &condition,
+                                 vector<unique_ptr<NodeAST>> &then_block,
+                                 vector<unique_ptr<NodeAST>> &else_block) {
+    m_condition = move(condition);
+    m_then = move(then_block);
+    m_else = move(else_block);
 }
 
+IfExpressionAST::~IfExpressionAST() {
+}
 
 Value *IfExpressionAST::make_IR(ValueMap &scope) const {
     /*
@@ -59,7 +59,7 @@ Value *IfExpressionAST::make_IR(ValueMap &scope) const {
     PN->addIncoming(ElseV, elseBB);
     return PN;
     */
-   return nullptr;
+    return nullptr;
 }
 
 }
